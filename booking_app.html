@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Запись на шоу</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f8; }
+        h1 { text-align: center; color: #222; }
+        label { display: block; margin-top: 20px; font-weight: bold; }
+        select, input[type="date"] {
+            width: 100%; padding: 10px; margin-top: 5px;
+            font-size: 16px; border-radius: 6px; border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 30px;
+            width: 100%; padding: 15px;
+            font-size: 18px;
+            background: #2f80ed; color: white; border: none; border-radius: 8px;
+        }
+        .confirmation {
+            margin-top: 20px;
+            padding: 10px;
+            background: #d1e7dd;
+            border: 1px solid #badbcc;
+            border-radius: 6px;
+            color: #0f5132;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>📅 Запись на шоу</h1>
+
+    <label for="date">Выберите дату:</label>
+    <input type="date" id="date">
+
+    <label for="time">Выберите время:</label>
+    <select id="time">
+        <option value="18:00">18:00</option>
+        <option value="19:30">19:30</option>
+        <option value="21:00">21:00</option>
+    </select>
+
+    <button onclick="submitBooking()">Записаться</button>
+
+    <div class="confirmation" id="confirmation">
+        Вы успешно записаны!
+    </div>
+
+    <script>
+        function submitBooking() {
+            const date = document.getElementById("date").value;
+            const time = document.getElementById("time").value;
+
+            if (!date || !time) {
+                alert("Пожалуйста, выбери дату и время");
+                return;
+            }
+
+            document.getElementById("confirmation").innerText =
+                `Вы успешно записаны на ${date} в ${time}`;
+            document.getElementById("confirmation").style.display = "block";
+        }
+    </script>
+</body>
+</html>
