@@ -4,248 +4,250 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Show Today — Бронирование</title>
+
+  <!-- Flatpickr CSS (календарь) -->
+  <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+
   <style>
-    /* ---- Цветовая палитра ---- */
-    :root {
-      --color-primary: #0042FF;
-      --color-accent:  #FFEB00;
-      --color-bg:      #0D0D0D;
-      --color-light:   #FFFFFF;
-      --step-width:    360px;
-    }
-
-    /* ---- Сброс базовых стилей ---- */
-    * { box-sizing: border-box; margin:0; padding:0; }
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--color-bg) url('Классика фон.png') center/cover fixed;
-      color: var(--color-light);
+      margin: 0;
+      font-family: sans-serif;
       min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
+      background: url('Классика фон.png') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
     }
-
-    /* ---- Карточка формы ---- */
-    .card {
-      width: var(--step-width);
-      background: rgba(0,0,0,0.8);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-    }
-    .card header {
-      background: var(--color-accent);
-      text-align: center;
-      padding: 16px;
-    }
-    .card header img {
-      max-height: 56px;
-    }
-    .card main {
-      padding: 20px;
-    }
-    fieldset {
-      border: none;
-      display: none;
-      animation: fadeIn 0.3s ease both;
-    }
-    fieldset.active { display: block; }
-    legend {
-      font-size: 1.1rem;
-      margin-bottom: 12px;
-      color: var(--color-accent);
-    }
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 0.95rem;
-    }
-    input[type="text"],
-    input[type="date"],
-    input[type="time"],
-    input[type="number"],
-    select,
-    textarea {
+    .container {
       width: 100%;
-      padding: 8px 10px;
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 6px;
-      background: rgba(255,255,255,0.1);
-      color: var(--color-light);
-      font-size: 1rem;
+      max-width: 500px;
+      margin: 20px;
+      background: rgba(0,0,0,0.8);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--color-primary);
+    header {
+      background: #FF0;
+      padding: 20px;
+      text-align: center;
     }
-    .actions {
+    header img {
+      max-width: 200px;
+      height: auto;
+    }
+    .step {
+      padding: 20px;
+      display: none;
+    }
+    .step.active { display: block; }
+    .step h2 {
+      margin-top: 0;
+      color: #FF0;
+    }
+    .controls {
       display: flex;
       justify-content: space-between;
-      margin-top: 16px;
+      margin-top: 20px;
     }
     button {
       flex: 1;
-      padding: 10px 14px;
+      margin: 0 5px;
+      padding: 10px;
+      font-size: 16px;
       border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: bold;
+      border-radius: 4px;
       cursor: pointer;
-      transition: background 0.2s ease;
     }
-    button + button { margin-left: 8px; }
-    .btn-next {
-      background: var(--color-primary);
-      color: var(--color-light);
+    button.next { background: #007aff; color: #fff; }
+    button.prev { background: #333; color: #fff; }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #444;
+      border-radius: 4px;
+      margin-top: 5px;
+      background: #111;
+      color: #fff;
     }
-    .btn-next:hover { background: #0035cc; }
-    .btn-prev {
-      background: rgba(255,255,255,0.2);
-      color: var(--color-light);
-    }
-    .btn-prev:hover { background: rgba(255,255,255,0.3); }
+    select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+    label { display: block; margin-top: 15px; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ---- Финальный экран ---- */
-    .thankyou {
-      text-align: center;
+    #final-message {
       padding: 40px 20px;
-      font-size: 1.1rem;
-      line-height: 1.5;
+      text-align: center;
+      font-size: 18px;
     }
-
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <header>
-      <img src="logo.png" alt="Show Today">
-    </header>
-    <main>
-      <form id="wizard">
+<div class="container">
+  <header>
+    <img src="logo.png" alt="Show Today Logo">
+  </header>
 
-        <!-- Шаг 1 -->
-        <fieldset class="step active" data-step="1">
-          <legend>1. Выберите формат</legend>
-          <label><input type="radio" name="mode" value="studio" required> В студии</label>
-          <label><input type="radio" name="mode" value="outdoor"> Выезд</label>
-          <div class="actions">
-            <button type="button" class="btn-next" data-next="2">Далее →</button>
-          </div>
-        </fieldset>
+  <form id="wizard">
+    <!-- Шаг 1: формат -->
+    <div class="step active" data-step="1">
+      <h2>1. Выберите формат</h2>
+      <label><input type="radio" name="mode" value="studio" required> В студии</label>
+      <label><input type="radio" name="mode" value="outdoor"> Выезд</label>
+      <div class="controls">
+        <div></div>
+        <button type="button" class="next">Далее →</button>
+      </div>
+    </div>
 
-        <!-- Шаг 2 -->
-        <fieldset class="step" data-step="2">
-          <legend>2. Дата и время</legend>
-          <label>Дата: <input type="date" name="date" required></label>
-          <label>Время: <input type="time" name="time" required></label>
-          <div class="actions">
-            <button type="button" class="btn-prev" data-prev="1">← Назад</button>
-            <button type="button" class="btn-next" data-next="3">Далее →</button>
-          </div>
-        </fieldset>
+    <!-- Шаг 2: дата/время -->
+    <div class="step" data-step="2">
+      <h2>2. Дата и время</h2>
+      <label>Дата:
+        <input id="date-picker" type="text" name="date" placeholder="Выберите дату" required>
+      </label>
+      <label>Время:
+        <select name="time" id="time-select" required>
+          <option value="">— выберите —</option>
+        </select>
+      </label>
+      <div class="controls">
+        <button type="button" class="prev">← Назад</button>
+        <button type="button" class="next">Далее →</button>
+      </div>
+    </div>
 
-        <!-- Шаг 3 -->
-        <fieldset class="step" data-step="3">
-          <legend>3. Подробности</legend>
-          <label>Кол-во человек: <input type="number" name="count" min="1" required></label>
-          <label id="address-row" style="display:none;">
-            Адрес (выезд): <input type="text" name="address">
-          </label>
-          <label>Программа:
-            <select name="program" required>
-              <option value="">— выберите —</option>
-              <option value="classic">Классика</option>
-              <option value="musicality">Musicality</option>
-              <option value="battle">Battle Show</option>
-              <option value="lotto">Музыкальное лото</option>
-              <option value="kids">Детский формат</option>
-              <option value="quiz">Квиз-мафия</option>
-              <option value="21plus">21+</option>
-            </select>
-          </label>
-          <label>Средний возраст: <input type="number" name="age" min="1" required></label>
-          <label>Повод праздника: <textarea name="occasion" rows="2" required></textarea></label>
-          <div class="actions">
-            <button type="button" class="btn-prev" data-prev="2">← Назад</button>
-            <button type="button" class="btn-next" data-next="4">Далее →</button>
-          </div>
-        </fieldset>
+    <!-- Шаг 3: подробности -->
+    <div class="step" data-step="3">
+      <h2>3. Подробности</h2>
+      <label>Количество человек:
+        <input type="number" name="count" min="1" required>
+      </label>
+      <label id="address-label" style="display:none;">
+        Адрес (для выезда):
+        <input type="text" name="address">
+      </label>
+      <label>Программа:
+        <select name="program" required>
+          <option value="">— выберите —</option>
+          <option value="classic">Классика</option>
+          <option value="musicality">Musicality</option>
+          <option value="battle">Battle Show</option>
+          <option value="lotto">Музыкальное лото</option>
+          <option value="kids">Детский формат</option>
+          <option value="quiz">Квиз-мафия</option>
+          <option value="21plus">Формат 21+</option>
+        </select>
+      </label>
+      <label>Средний возраст участников:
+        <input type="number" name="age" min="1" required>
+      </label>
+      <label>Сколько раз были на нашем шоу:
+        <input type="number" name="visits" min="0" required>
+      </label>
+      <label>Повод праздника:
+        <textarea name="occasion" rows="2" required></textarea>
+      </label>
+      <div class="controls">
+        <button type="button" class="prev">← Назад</button>
+        <button type="button" class="next">Далее →</button>
+      </div>
+    </div>
 
-        <!-- Шаг 4: подтверждение -->
-        <fieldset class="step" data-step="4">
-          <legend>4. Подтверждение</legend>
-          <p>Проверьте всё ещё раз и нажмите «Записаться».</p>
-          <div class="actions">
-            <button type="button" class="btn-prev" data-prev="3">← Назад</button>
-            <button type="submit" class="btn-next">Записаться</button>
-          </div>
-        </fieldset>
+    <!-- Шаг 4: финал -->
+    <div class="step" data-step="4">
+      <h2>4. Подтвердить</h2>
+      <p>Проверьте введённые данные и нажмите «Записаться»</p>
+      <div class="controls">
+        <button type="button" class="prev">← Назад</button>
+        <button type="submit" class="next">Записаться</button>
+      </div>
+    </div>
+  </form>
 
-      </form>
-    </main>
+  <!-- Сообщение после отправки -->
+  <div id="final-message" style="display:none;">
+    Спасибо!<br>С вами свяжется администратор или ведущий для уточнения деталей.
   </div>
+</div>
 
-  <script>
-    // WebApp API
-    const tg = window.Telegram?.WebApp;
-    if (tg) tg.expand();
+<!-- Flatpickr и WebApp API -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.expand();
 
-    // Логика мастера
-    const steps = document.querySelectorAll('.step');
-    function showStep(n) {
-      steps.forEach(f => f.classList.remove('active'));
-      document.querySelector(`.step[data-step="${n}"]`).classList.add('active');
-      window.scrollTo(0, 0);
+  // Flatpickr
+  flatpickr("#date-picker", {
+    minDate: "today",
+    dateFormat: "d.m.Y"
+  });
+
+  // Заполнение списка времени (09:00–21:30, шаг 30 мин)
+  const timeSelect = document.getElementById("time-select");
+  for (let h=9; h<=21; h++) {
+    for (let m of [0,30]) {
+      const hh = String(h).padStart(2,"0");
+      const mm = String(m).padStart(2,"0");
+      const opt = document.createElement("option");
+      opt.value = `${hh}:${mm}`;
+      opt.text = `${hh}:${mm}`;
+      timeSelect.append(opt);
     }
+  }
 
-    // Кнопки Далее и Назад
-    document.querySelectorAll('.btn-next').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.preventDefault();
-        const next = btn.dataset.next;
-        // проверка валидации текущего fieldset
-        const cur = btn.closest('fieldset');
-        if (btn.type==='submit' || cur.checkValidity()) {
-          if (btn.type==='submit') {
-            // отправка данных
-            const data = Object.fromEntries(new FormData(cur.form).entries());
-            tg?.sendData(JSON.stringify({action:'booking',payload:data}));
-            // заменить карту на благодарность
-            document.querySelector('.card').innerHTML = 
-              `<div class="thankyou">
-                 Спасибо!<br>С вами свяжется администратор или ведущий.
-               </div>`;
-          } else {
-            showStep(next);
-          }
-        } else {
-          cur.reportValidity();
+  // Показ/скрытие поля «Адрес» в шаге 3
+  document.querySelectorAll('input[name="mode"]').forEach(radio=>{
+    radio.onchange = ()=>{
+      const addr = document.getElementById("address-label");
+      if (radio.value==="outdoor" && radio.checked) {
+        addr.style.display = "block";
+        addr.querySelector("input").required = true;
+      } else {
+        addr.style.display = "none";
+        addr.querySelector("input").required = false;
+      }
+    };
+  });
+
+  // Навигация между шагами
+  const steps = Array.from(document.querySelectorAll(".step"));
+  let current = 0;
+
+  function showStep(i) {
+    steps.forEach((s,k)=> s.classList.toggle("active", k===i));
+  }
+
+  document.querySelectorAll(".next").forEach(btn=>{
+    btn.onclick = ()=>{
+      // если это сабмит, то отправляем данные и показываем финал
+      if (btn.type==="submit") {
+        const data = Object.fromEntries(new FormData(document.getElementById("wizard")).entries());
+        tg.sendData(JSON.stringify({ action:"booking", payload: data }));
+        document.getElementById("wizard").style.display = "none";
+        document.getElementById("final-message").style.display = "block";
+      } else {
+        if (current < steps.length-1) {
+          current++;
+          showStep(current);
         }
-      });
-    });
-    document.querySelectorAll('.btn-prev').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.preventDefault();
-        showStep(btn.dataset.prev);
-      });
-    });
+      }
+    };
+  });
+  document.querySelectorAll(".prev").forEach(btn=>{
+    btn.onclick = ()=>{
+      if (current>0) {
+        current--;
+        showStep(current);
+      }
+    };
+  });
 
-    // Показ адреса при выезде
-    document.querySelectorAll('input[name="mode"]').forEach(r => {
-      r.addEventListener('change', ()=> {
-        const show = r.value==='outdoor' && r.checked;
-        document.getElementById('address-row').style.display = show? 'block':'none';
-        document.querySelector('input[name="address"]').required = show;
-      });
-    });
-  </script>
+  // Инициализация
+  showStep(0);
+</script>
 
 </body>
 </html>
