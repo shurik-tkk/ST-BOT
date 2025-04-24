@@ -5,66 +5,128 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Show Today — Бронирование</title>
   <style>
+    /* жёлтый фон на всю страницу */
     body {
-      margin: 0; font-family: sans-serif; background: #f5f5f5; color: #333;
+      margin: 0;
+      font-family: sans-serif;
+      background: #FFEB3B;
+      color: #333;
     }
     header {
-      background: #ffffff; padding: 20px; text-align: center;
+      background: #ffffff;
+      padding: 20px;
+      text-align: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    header img { height: 50px; }
+    header img {
+      height: 60px;
+    }
     main {
-      padding: 20px; max-width: 500px; margin: auto;
-      background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      max-width: 500px;
+      margin: 40px auto;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       border-radius: 8px;
     }
     fieldset {
-      margin-bottom: 15px; border: none;
+      margin: 0;
+      padding: 0;
+      border: none;
+      display: none; /* по умолчанию скрываем */
+    }
+    fieldset.active {
+      display: block;
     }
     legend {
-      font-weight: bold; margin-bottom: 8px;
+      font-weight: bold;
+      margin-bottom: 8px;
     }
-    label { display: block; margin-bottom: 5px; }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
     input, select, button, textarea {
-      width: 100%; padding: 8px; margin-bottom: 10px;
-      border: 1px solid #ccc; border-radius: 4px;
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
       font-size: 16px;
+      box-sizing: border-box;
     }
     button {
-      background: #007aff; color: #fff; border: none;
-      cursor: pointer; font-weight: bold;
+      background: #007AFF;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
     }
-    button:disabled { background: #ccc; cursor: default; }
+    button:disabled {
+      background: #ccc;
+      cursor: default;
+    }
+    .actions {
+      text-align: right;
+      margin-top: 10px;
+    }
+    .actions button + button {
+      margin-left: 8px;
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <img src="logo.png" alt="Show Today">
+  <!-- поправьте имя файла под своё -->
+  <img src="logo.png" alt="Show Today Logo">
 </header>
 
 <main>
-  <form id="booking-form">
-    <!-- Шаг 1: формат -->
-    <fieldset>
+  <form id="wizard-form">
+
+    <!-- ШАГ 1: формат -->
+    <fieldset class="step active" data-step="1">
       <legend>Выберите формат</legend>
-      <label><input type="radio" name="mode" value="studio" required> В студии</label>
-      <label><input type="radio" name="mode" value="outdoor"> Выезд</label>
+      <label>
+        <input type="radio" name="mode" value="studio" required>
+        В студии
+      </label>
+      <label>
+        <input type="radio" name="mode" value="outdoor">
+        Выезд
+      </label>
+      <div class="actions">
+        <button type="button" id="next-1">Продолжить →</button>
+      </div>
     </fieldset>
 
-    <!-- Шаг 2: дата/время -->
-    <fieldset>
+    <!-- ШАГ 2: дата и время -->
+    <fieldset class="step" data-step="2">
       <legend>Дата и время</legend>
-      <label>Дата: <input type="date" name="date" required></label>
-      <label>Время: <input type="time" name="time" required></label>
+      <label>Дата:
+        <input type="date" name="date" required>
+      </label>
+      <label>Время:
+        <input type="time" name="time" required>
+      </label>
+      <div class="actions">
+        <button type="button" id="prev-2">← Назад</button>
+        <button type="button" id="next-2">Продолжить →</button>
+      </div>
     </fieldset>
 
-    <!-- Шаг 3: подробности -->
-    <fieldset>
+    <!-- ШАГ 3: подробности -->
+    <fieldset class="step" data-step="3">
       <legend>Подробности</legend>
-      <label>Количество человек: <input type="number" name="count" min="1" required></label>
+      <label>Количество человек:
+        <input type="number" name="count" min="1" required>
+      </label>
       <label id="address-label" style="display:none;">
-        Адрес (для выезда): <input type="text" name="address">
+        Адрес (для выезда):
+        <input type="text" name="address">
       </label>
       <label>Программа:
         <select name="program" required>
@@ -78,47 +140,83 @@
           <option value="21plus">Формат 21+</option>
         </select>
       </label>
-      <label>Средний возраст участников: <input type="number" name="age" min="1" required></label>
-      <label>Сколько раз были на нашем шоу: <input type="number" name="visits" min="0" required></label>
-      <label>Повод праздника: <textarea name="occasion" rows="2" required></textarea></label>
+      <label>Средний возраст участников:
+        <input type="number" name="age" min="1" required>
+      </label>
+      <label>Сколько раз были на нашем шоу:
+        <input type="number" name="visits" min="0" required>
+      </label>
+      <label>Повод праздника:
+        <textarea name="occasion" rows="2" required></textarea>
+      </label>
+      <div class="actions">
+        <button type="button" id="prev-3">← Назад</button>
+        <button type="button" id="next-3">Продолжить →</button>
+      </div>
     </fieldset>
 
-    <button type="submit" id="submit-btn">Забронировать</button>
+    <!-- ШАГ 4: подтверждение -->
+    <fieldset class="step" data-step="4">
+      <legend>Подтверждение</legend>
+      <p>Проверьте введённые данные и нажмите «Записаться».</p>
+      <div class="actions">
+        <button type="button" id="prev-4">← Назад</button>
+        <button type="submit" id="submit-btn">Записаться</button>
+      </div>
+    </fieldset>
+
   </form>
 </main>
 
 <script>
   // Telegram WebApp API
-  const tg = window.Telegram.WebApp;
-  tg.expand();  // растягиваем WebApp под весь экран
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.expand(); }
 
-  // Показ/скрытие поля "Адрес"
+  // Переключение шагов
+  const steps = Array.from(document.querySelectorAll('.step'));
+  function showStep(n) {
+    steps.forEach(f => f.classList.remove('active'));
+    document.querySelector(`.step[data-step="${n}"]`).classList.add('active');
+  }
+
+  document.getElementById('next-1').onclick = () => {
+    showStep(2);
+  };
+  document.getElementById('prev-2').onclick = () => showStep(1);
+  document.getElementById('next-2').onclick = () => showStep(3);
+  document.getElementById('prev-3').onclick = () => showStep(2);
+  document.getElementById('next-3').onclick = () => showStep(4);
+  document.getElementById('prev-4').onclick = () => showStep(3);
+
+  // Показ/скрытие поля «Адрес» на шаге 3
   const modeRadios = document.querySelectorAll('input[name="mode"]');
   const addressLabel = document.getElementById('address-label');
   modeRadios.forEach(r => {
-    r.addEventListener('change', ()=> {
-      addressLabel.style.display = (r.value === 'outdoor' && r.checked) ? 'block' : 'none';
-      // если outdoor, делаем адрес обязательным:
-      addressLabel.querySelector('input').required = (r.value==='outdoor' && r.checked);
+    r.addEventListener('change', () => {
+      const show = r.value === 'outdoor' && r.checked;
+      addressLabel.style.display = show ? 'block' : 'none';
+      addressLabel.querySelector('input').required = show;
     });
   });
 
-  // Обработка отправки формы
-  document.getElementById('booking-form').addEventListener('submit', e => {
+  // Отправка формы
+  document.getElementById('wizard-form').addEventListener('submit', e => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target).entries());
-    // отправляем JSON-строку боту
-    tg.sendData(JSON.stringify({
+    const payload = {
       action: 'booking',
       timestamp: Date.now(),
       payload: data
-    }));
-    // меняем кнопку и показываем благодарность
-    const btn = document.getElementById('submit-btn');
-    btn.innerText = 'Отправлено!'; btn.disabled = true;
-    setTimeout(()=>{
-      document.body.innerHTML = '<p style="text-align:center; margin-top:50px;">Спасибо!<br>С вами свяжется администратор или ведущий для уточнения деталей.</p>';
-    }, 500);
+    };
+    tg?.sendData(JSON.stringify(payload));
+
+    // Замена содержимого на «Спасибо!»
+    document.querySelector('main').innerHTML =
+      `<p style="text-align:center; margin:60px 0; font-size:18px;">
+         Спасибо!<br>
+         С вами свяжется администратор или ведущий для уточнения деталей.
+       </p>`;
   });
 </script>
 
