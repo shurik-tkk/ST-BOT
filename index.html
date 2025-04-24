@@ -4,124 +4,98 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Show Today — Бронирование</title>
-
-  <!-- Flatpickr CSS (календарь) -->
-  <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
-
   <style>
-    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: sans-serif;
-      min-height: 100vh;
-      background: url('Классика фон.png') center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-    }
-    .container {
-      width: 100%;
-      max-width: 500px;
-      margin: 20px;
-      background: rgba(0,0,0,0.8);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      background: #f5f5f5;
+      color: #333;
     }
     header {
-      background: #FF0;
+      background: #ffffff;
       padding: 20px;
       text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     header img {
-      max-width: 200px;
-      height: auto;
+      height: 50px;
     }
-    .step {
+    main {
       padding: 20px;
-      display: none;
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
     }
-    .step.active { display: block; }
-    .step h2 {
-      margin-top: 0;
-      color: #FF0;
-    }
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
-    button {
-      flex: 1;
-      margin: 0 5px;
-      padding: 10px;
-      font-size: 16px;
+    fieldset {
+      margin-bottom: 15px;
       border: none;
-      border-radius: 4px;
-      cursor: pointer;
     }
-    button.next { background: #007aff; color: #fff; }
-    button.prev { background: #333; color: #fff; }
-    input, select {
+    legend {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input, select, button, textarea {
       width: 100%;
       padding: 8px;
-      font-size: 16px;
-      border: 1px solid #444;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
       border-radius: 4px;
-      margin-top: 5px;
-      background: #111;
-      color: #fff;
+      font-size: 16px;
     }
-    select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
-    label { display: block; margin-top: 15px; }
-
-    #final-message {
-      padding: 40px 20px;
-      text-align: center;
-      font-size: 18px;
+    button {
+      background: #007aff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: default;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <header>
-    <img src="logo.png" alt="Show Today Logo">
-  </header>
+<header>
+  <img src="logo.png" alt="Show Today">
+</header>
 
-  <form id="wizard">
+<main>
+  <form id="booking-form">
     <!-- Шаг 1: формат -->
-    <div class="step active" data-step="1">
-      <h2>1. Выберите формат</h2>
+    <fieldset data-step="1">
+      <legend>1. Выберите формат</legend>
       <label><input type="radio" name="mode" value="studio" required> В студии</label>
       <label><input type="radio" name="mode" value="outdoor"> Выезд</label>
-      <div class="controls">
-        <div></div>
-        <button type="button" class="next">Далее →</button>
-      </div>
-    </div>
+      <button type="button" id="next-1">Продолжить →</button>
+    </fieldset>
 
     <!-- Шаг 2: дата/время -->
-    <div class="step" data-step="2">
-      <h2>2. Дата и время</h2>
+    <fieldset data-step="2" style="display:none;">
+      <legend>2. Дата и время</legend>
       <label>Дата:
-        <input id="date-picker" type="text" name="date" placeholder="Выберите дату" required>
+        <input type="date" name="date" required>
       </label>
       <label>Время:
-        <select name="time" id="time-select" required>
-          <option value="">— выберите —</option>
+        <select name="time" required>
+          <option value="">– выберите –</option>
+          <!-- Генерация опций через JS -->
         </select>
       </label>
-      <div class="controls">
-        <button type="button" class="prev">← Назад</button>
-        <button type="button" class="next">Далее →</button>
-      </div>
-    </div>
+      <button type="button" id="prev-2">← Назад</button>
+      <button type="button" id="next-2">Далее →</button>
+    </fieldset>
 
     <!-- Шаг 3: подробности -->
-    <div class="step" data-step="3">
-      <h2>3. Подробности</h2>
+    <fieldset data-step="3" style="display:none;">
+      <legend>3. Подробности</legend>
       <label>Количество человек:
         <input type="number" name="count" min="1" required>
       </label>
@@ -131,124 +105,88 @@
       </label>
       <label>Программа:
         <select name="program" required>
-          <option value="">— выберите —</option>
+          <option value="">– выберите –</option>
           <option value="classic">Классика</option>
-          <option value="musicality">Musicality</option>
+          <option value="musicality">Музыкалити</option>
           <option value="battle">Battle Show</option>
           <option value="lotto">Музыкальное лото</option>
           <option value="kids">Детский формат</option>
           <option value="quiz">Квиз-мафия</option>
-          <option value="21plus">Формат 21+</option>
+          <option value="21plus">21+</option>
         </select>
       </label>
       <label>Средний возраст участников:
         <input type="number" name="age" min="1" required>
       </label>
-      <label>Сколько раз были на нашем шоу:
+      <label>Сколько раз были у нас?
         <input type="number" name="visits" min="0" required>
       </label>
       <label>Повод праздника:
         <textarea name="occasion" rows="2" required></textarea>
       </label>
-      <div class="controls">
-        <button type="button" class="prev">← Назад</button>
-        <button type="button" class="next">Далее →</button>
-      </div>
-    </div>
-
-    <!-- Шаг 4: финал -->
-    <div class="step" data-step="4">
-      <h2>4. Подтвердить</h2>
-      <p>Проверьте введённые данные и нажмите «Записаться»</p>
-      <div class="controls">
-        <button type="button" class="prev">← Назад</button>
-        <button type="submit" class="next">Записаться</button>
-      </div>
-    </div>
+      <button type="button" id="prev-3">← Назад</button>
+      <button type="submit" id="submit-btn">Записаться</button>
+    </fieldset>
   </form>
+</main>
 
-  <!-- Сообщение после отправки -->
-  <div id="final-message" style="display:none;">
-    Спасибо!<br>С вами свяжется администратор или ведущий для уточнения деталей.
-  </div>
-</div>
-
-<!-- Flatpickr и WebApp API -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
   const tg = window.Telegram.WebApp;
   tg.expand();
 
-  // Flatpickr
-  flatpickr("#date-picker", {
-    minDate: "today",
-    dateFormat: "d.m.Y"
-  });
+  const form = document.getElementById('booking-form');
+  const steps = Array.from(form.querySelectorAll('fieldset'));
+  let currentStep = 0;
 
-  // Заполнение списка времени (09:00–21:30, шаг 30 мин)
-  const timeSelect = document.getElementById("time-select");
-  for (let h=9; h<=21; h++) {
-    for (let m of [0,30]) {
-      const hh = String(h).padStart(2,"0");
-      const mm = String(m).padStart(2,"0");
-      const opt = document.createElement("option");
-      opt.value = `${hh}:${mm}`;
-      opt.text = `${hh}:${mm}`;
-      timeSelect.append(opt);
-    }
+  // Кнопки навигации
+  document.getElementById('next-1').onclick = ()=> goToStep(1);
+  document.getElementById('prev-2').onclick = ()=> goToStep(0);
+  document.getElementById('next-2').onclick = ()=> goToStep(2);
+  document.getElementById('prev-3').onclick = ()=> goToStep(1);
+
+  function goToStep(n) {
+    steps[currentStep].style.display = 'none';
+    steps[n].style.display = '';
+    currentStep = n;
   }
 
-  // Показ/скрытие поля «Адрес» в шаге 3
-  document.querySelectorAll('input[name="mode"]').forEach(radio=>{
+  // Показ/скрытие поля адреса
+  form.querySelectorAll('input[name="mode"]').forEach(radio=>{
     radio.onchange = ()=>{
-      const addr = document.getElementById("address-label");
-      if (radio.value==="outdoor" && radio.checked) {
-        addr.style.display = "block";
-        addr.querySelector("input").required = true;
-      } else {
-        addr.style.display = "none";
-        addr.querySelector("input").required = false;
-      }
+      const addr = document.getElementById('address-label');
+      addr.style.display = radio.value==='outdoor' ? '' : 'none';
+      addr.querySelector('input').required = radio.value==='outdoor';
     };
   });
 
-  // Навигация между шагами
-  const steps = Array.from(document.querySelectorAll(".step"));
-  let current = 0;
-
-  function showStep(i) {
-    steps.forEach((s,k)=> s.classList.toggle("active", k===i));
+  // Генерация списка времени (с 9:00 до 21:00 с шагом 30 мин)
+  const timeSelect = form.querySelector('select[name="time"]');
+  const start = 9, end = 21;
+  for(let h=start; h<=end; h++){
+    [0,30].forEach(min=>{
+      if(h===end && min>0) return;
+      const txt = String(h).padStart(2,'0')+':'+String(min).padStart(2,'0');
+      const opt = document.createElement('option');
+      opt.value = txt; opt.textContent = txt;
+      timeSelect.append(opt);
+    });
   }
 
-  document.querySelectorAll(".next").forEach(btn=>{
-    btn.onclick = ()=>{
-      // если это сабмит, то отправляем данные и показываем финал
-      if (btn.type==="submit") {
-        const data = Object.fromEntries(new FormData(document.getElementById("wizard")).entries());
-        tg.sendData(JSON.stringify({ action:"booking", payload: data }));
-        document.getElementById("wizard").style.display = "none";
-        document.getElementById("final-message").style.display = "block";
-      } else {
-        if (current < steps.length-1) {
-          current++;
-          showStep(current);
-        }
-      }
-    };
-  });
-  document.querySelectorAll(".prev").forEach(btn=>{
-    btn.onclick = ()=>{
-      if (current>0) {
-        current--;
-        showStep(current);
-      }
-    };
-  });
-
-  // Инициализация
-  showStep(0);
+  // Отправка данных боту
+  form.onsubmit = e=>{
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    tg.sendData(JSON.stringify({ action:'booking', payload:data }));
+    document.getElementById('submit-btn').innerText='Отправлено';
+    document.getElementById('submit-btn').disabled = true;
+    setTimeout(()=>{
+      document.body.innerHTML = 
+        '<p style="text-align:center; margin-top:50px;">' +
+        'Спасибо!<br>С вами свяжется администратор или ведущий для уточнения деталей.' +
+        '</p>';
+    }, 500);
+  };
 </script>
 
 </body>
 </html>
-
