@@ -1,68 +1,126 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Запись на шоу</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f8; }
-        h1 { text-align: center; color: #222; }
-        label { display: block; margin-top: 20px; font-weight: bold; }
-        select, input[type="date"] {
-            width: 100%; padding: 10px; margin-top: 5px;
-            font-size: 16px; border-radius: 6px; border: 1px solid #ccc;
-        }
-        button {
-            margin-top: 30px;
-            width: 100%; padding: 15px;
-            font-size: 18px;
-            background: #2f80ed; color: white; border: none; border-radius: 8px;
-        }
-        .confirmation {
-            margin-top: 20px;
-            padding: 10px;
-            background: #d1e7dd;
-            border: 1px solid #badbcc;
-            border-radius: 6px;
-            color: #0f5132;
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Show Today — Бронирование</title>
+  <style>
+    body {
+      margin: 0; font-family: sans-serif; background: #f5f5f5; color: #333;
+    }
+    header {
+      background: #ffffff; padding: 20px; text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header img { height: 50px; }
+    main {
+      padding: 20px; max-width: 500px; margin: auto;
+      background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    fieldset {
+      margin-bottom: 15px; border: none;
+    }
+    legend {
+      font-weight: bold; margin-bottom: 8px;
+    }
+    label { display: block; margin-bottom: 5px; }
+    input, select, button, textarea {
+      width: 100%; padding: 8px; margin-bottom: 10px;
+      border: 1px solid #ccc; border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      background: #007aff; color: #fff; border: none;
+      cursor: pointer; font-weight: bold;
+    }
+    button:disabled { background: #ccc; cursor: default; }
+  </style>
 </head>
 <body>
-    <h1>📅 Запись на шоу</h1>
 
-    <label for="date">Выберите дату:</label>
-    <input type="date" id="date">
+<header>
+  <img src="logo.png" alt="Show Today">
+</header>
 
-    <label for="time">Выберите время:</label>
-    <select id="time">
-        <option value="18:00">18:00</option>
-        <option value="19:30">19:30</option>
-        <option value="21:00">21:00</option>
-    </select>
+<main>
+  <form id="booking-form">
+    <!-- Шаг 1: формат -->
+    <fieldset>
+      <legend>Выберите формат</legend>
+      <label><input type="radio" name="mode" value="studio" required> В студии</label>
+      <label><input type="radio" name="mode" value="outdoor"> Выезд</label>
+    </fieldset>
 
-    <button onclick="submitBooking()">Записаться</button>
+    <!-- Шаг 2: дата/время -->
+    <fieldset>
+      <legend>Дата и время</legend>
+      <label>Дата: <input type="date" name="date" required></label>
+      <label>Время: <input type="time" name="time" required></label>
+    </fieldset>
 
-    <div class="confirmation" id="confirmation">
-        Вы успешно записаны!
-    </div>
+    <!-- Шаг 3: подробности -->
+    <fieldset>
+      <legend>Подробности</legend>
+      <label>Количество человек: <input type="number" name="count" min="1" required></label>
+      <label id="address-label" style="display:none;">
+        Адрес (для выезда): <input type="text" name="address">
+      </label>
+      <label>Программа:
+        <select name="program" required>
+          <option value="">— выберите —</option>
+          <option value="classic">Классика</option>
+          <option value="musicality">Musicality</option>
+          <option value="battle">Battle Show</option>
+          <option value="lotto">Музыкальное лото</option>
+          <option value="kids">Детский формат</option>
+          <option value="quiz">Квиз-мафия</option>
+          <option value="21plus">Формат 21+</option>
+        </select>
+      </label>
+      <label>Средний возраст участников: <input type="number" name="age" min="1" required></label>
+      <label>Сколько раз были на нашем шоу: <input type="number" name="visits" min="0" required></label>
+      <label>Повод праздника: <textarea name="occasion" rows="2" required></textarea></label>
+    </fieldset>
 
-    <script>
-        function submitBooking() {
-            const date = document.getElementById("date").value;
-            const time = document.getElementById("time").value;
+    <button type="submit" id="submit-btn">Забронировать</button>
+  </form>
+</main>
 
-            if (!date || !time) {
-                alert("Пожалуйста, выбери дату и время");
-                return;
-            }
+<script>
+  // Telegram WebApp API
+  const tg = window.Telegram.WebApp;
+  tg.expand();  // растягиваем WebApp под весь экран
 
-            document.getElementById("confirmation").innerText =
-                `Вы успешно записаны на ${date} в ${time}`;
-            document.getElementById("confirmation").style.display = "block";
-        }
-    </script>
+  // Показ/скрытие поля "Адрес"
+  const modeRadios = document.querySelectorAll('input[name="mode"]');
+  const addressLabel = document.getElementById('address-label');
+  modeRadios.forEach(r => {
+    r.addEventListener('change', ()=> {
+      addressLabel.style.display = (r.value === 'outdoor' && r.checked) ? 'block' : 'none';
+      // если outdoor, делаем адрес обязательным:
+      addressLabel.querySelector('input').required = (r.value==='outdoor' && r.checked);
+    });
+  });
+
+  // Обработка отправки формы
+  document.getElementById('booking-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target).entries());
+    // отправляем JSON-строку боту
+    tg.sendData(JSON.stringify({
+      action: 'booking',
+      timestamp: Date.now(),
+      payload: data
+    }));
+    // меняем кнопку и показываем благодарность
+    const btn = document.getElementById('submit-btn');
+    btn.innerText = 'Отправлено!'; btn.disabled = true;
+    setTimeout(()=>{
+      document.body.innerHTML = '<p style="text-align:center; margin-top:50px;">Спасибо!<br>С вами свяжется администратор или ведущий для уточнения деталей.</p>';
+    }, 500);
+  });
+</script>
+
 </body>
 </html>
