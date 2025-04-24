@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
   <style>
+    /* базовые цвета */
     :root {
       --yellow: #ff0;
       --black:  #0d0d0d;
@@ -15,12 +16,14 @@
       --blue:   #0042ff;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     html, body {
       height: 100%;
       background: var(--yellow);
       font-family: "Segoe UI", sans-serif;
     }
     body {
+      /* чёрный паттерн по центру */
       background-image: url("background.png");
       background-size: cover;
       background-position: center;
@@ -29,6 +32,8 @@
       justify-content: center;
       padding: 20px;
     }
+
+    /* самый внешний контейнер */
     .wizard {
       background: var(--black);
       border-radius: 12px;
@@ -37,6 +42,7 @@
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(0,0,0,0.4);
     }
+    /* Шапка */
     .wizard header {
       background: var(--yellow);
       text-align: center;
@@ -46,16 +52,21 @@
       max-width: 200px;
       height: auto;
     }
+
+    /* шаги */
     .wizard .step {
       padding: 16px;
       display: none;
       color: var(--white);
     }
     .wizard .step.active { display: block; }
+
     .wizard .step h2 {
       margin-bottom: 12px;
       font-size: 1.1rem;
     }
+
+    /* радио и чекбоксы */
     .wizard label {
       display: flex;
       align-items: center;
@@ -68,6 +79,8 @@
       width: 18px;
       height: 18px;
     }
+
+    /* поля и селекты */
     .wizard input,
     .wizard select,
     .wizard textarea {
@@ -81,6 +94,8 @@
       color: var(--white);
     }
     .wizard textarea { resize: vertical; }
+
+    /* кнопки */
     .wizard .buttons {
       display: flex;
       justify-content: space-between;
@@ -106,6 +121,8 @@
       opacity: 0.5;
       cursor: default;
     }
+
+    /* отступ под футер */
     .wizard .step:last-child { padding-bottom: 24px; }
   </style>
 </head>
@@ -169,7 +186,7 @@
       <label>Средний возраст:
         <input type="number" id="age" min="1" value="18">
       </label>
-      <label>Сколько раз были у нас?
+      <label>Сколько раз были у нас:
         <input type="number" id="visits" min="0" value="0">
       </label>
       <label>Повод праздника:
@@ -182,44 +199,47 @@
     </div>
   </div>
 
-  <!-- Flatpickr и скрипт переключения шагов -->
+  <!-- Flatpickr и скрипт -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
-    const steps = Array.from(document.querySelectorAll('.step'));
-    let current = 0;
+    const steps  = Array.from(document.querySelectorAll('.step'));
+    let   current = 0;
 
-    // Заполняем селект времени (09:00–22:00, шаг 30м)
+    // 1) Генерация времени
     const timeSelect = document.getElementById('time-select');
     for (let h = 9; h <= 22; h++) {
       ['00','30'].forEach(m => {
         if (h === 22 && m === '30') return;
         const opt = document.createElement('option');
-        opt.value = `${String(h).padStart(2,'0')}:${m}`;
-        opt.textContent = `${h}:${m}`;
+        opt.value       = `${h.toString().padStart(2,'0')}:${m}`;
+        opt.textContent = `${h.toString().padStart(2,'0')}:${m}`;
         timeSelect.append(opt);
       });
     }
 
-    // Инициализируем Flatpickr
+    // 2) Календарь
     flatpickr("#date-picker", {
       dateFormat: "d.m.Y",
       minDate: "today",
       onChange: () => validateStep(1)
     });
 
+    // Показываем нужный шаг
     function showStep(idx) {
-      steps.forEach((st, i) => st.classList.toggle('active', i === idx));
+      steps.forEach((st,i)=> st.classList.toggle('active', i === idx));
       current = idx;
       validateStep(idx);
-      // Показать/скрыть поле адреса при выезде
+      // Адрес для выезда
       const mode = document.querySelector('input[name="mode"]:checked')?.value;
       document.getElementById('address-container').style.display =
         mode === 'outdoor' ? 'block' : 'none';
     }
 
+    // Включаем/выключаем кнопки «Далее»
     function validateStep(idx) {
-      const btnNext = steps[idx].querySelector('.btn-next');
+      const btn = steps[idx].querySelector('.btn-next');
       let ok = false;
+
       if (idx === 0) {
         ok = !!document.querySelector('input[name="mode"]:checked');
       }
@@ -232,4 +252,69 @@
           document.getElementById('program').value &&
           document.getElementById('age').value > 0 &&
           document.getElementById('visits').value >= 0 &&
-          document.get
+          document.getElementById('occasion').value.trim() !== '' &&
+          (document.getElementById('address-container').style.display === 'none'
+            || document.getElementById('address').value.trim() !== '')
+        );
+      }
+
+      btn.disabled = !ok;
+    }
+
+    // Навигация «Далее» / «Назад»
+    document.querySelectorAll('.btn-next').forEach(b => {
+      b.addEventListener('click', () => {
+        if (current < steps.length - 1) {
+          showStep(current + 1);
+        } else {
+          finish();
+        }
+      });
+    });
+    document.querySelectorAll('.btn-prev').forEach(b => {
+      b.addEventListener('click', () => {
+        if (current > 0) showStep(current - 1);
+      });
+    });
+
+    // При любом вводе — проверяем форму
+    steps.forEach((st,i) => {
+      st.addEventListener('input',  () => validateStep(i));
+      st.addEventListener('change', () => validateStep(i));
+    });
+
+    // Отправка данных
+    function finish() {
+      const data = {
+        mode:    document.querySelector('input[name="mode"]:checked').value,
+        date:    document.getElementById('date-picker').value,
+        time:    timeSelect.value,
+        count:   document.getElementById('count').value,
+        address: document.getElementById('address')?.value || '',
+        program: document.getElementById('program').value,
+        age:     document.getElementById('age').value,
+        visits:  document.getElementById('visits').value,
+        occasion:document.getElementById('occasion').value
+      };
+
+      // шлём боту
+      Telegram.WebApp.sendData(JSON.stringify({
+        action:  'booking',
+        payload: data
+      }));
+
+      // показываем благодарность
+      steps[current].innerHTML = `
+        <p style="
+          color:white;
+          text-align:center;
+          padding:40px 20px;
+          line-height:1.5;
+        ">
+          Спасибо!<br>С вами свяжется администратор для уточнения деталей.
+        </p>
+      `;
+    }
+  </script>
+</body>
+</html>
