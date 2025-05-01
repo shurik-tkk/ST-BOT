@@ -28,6 +28,7 @@
 <body>
   <div class="wizard">
     <header><img src="logo.png" alt="Show Today"></header>
+    <!-- Форма без изменений -->
     <div class="step active" data-step="1">
       <h2>1. Выберите формат</h2>
       <label><input type="radio" name="mode" value="studio"> В студии</label>
@@ -37,6 +38,8 @@
         <button class="btn-next" disabled>Далее →</button>
       </div>
     </div>
+    <!-- Остальные шаги оставлены как есть -->
+    <!-- Шаг 2 -->
     <div class="step" data-step="2">
       <h2>2. Дата и время</h2>
       <label>Дата: <input id="date-picker" readonly placeholder="– выберите дату –"></label>
@@ -46,6 +49,7 @@
         <button class="btn-next" disabled>Далее →</button>
       </div>
     </div>
+    <!-- Шаг 3 -->
     <div class="step" data-step="3">
       <h2>3. Подробности</h2>
       <label>Количество: <input type="text" id="count" inputmode="numeric" pattern="\d*" placeholder="1"></label>
@@ -59,6 +63,7 @@
         <button class="btn-next" disabled>Далее →</button>
       </div>
     </div>
+    <!-- Шаг 4 -->
     <div class="step" data-step="4">
       <h2>4. Доп. услуги & пожелания</h2>
       <div id="extras-container">
@@ -73,6 +78,7 @@
       </div>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
     const tg = (typeof window.Telegram === 'object' && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
@@ -92,15 +98,13 @@
     const occasionSel = document.getElementById('occasion');
 
     flatpickr(datePicker, { dateFormat:'d.m.Y', minDate:'today', onChange:()=>validateStep(1) });
-    for (let h=9; h<=22; h++) {
-      ['00','30'].forEach(m=>{
-        if (h===22 && m==='30') return;
-        const opt = document.createElement('option');
-        opt.value = `${h.toString().padStart(2,'0')}:${m}`;
-        opt.textContent = opt.value;
-        timeSelect.append(opt);
-      });
-    }
+    for (let h=9; h<=22; h++) ['00','30'].forEach(m=>{
+      if (h===22 && m==='30') return;
+      const opt = document.createElement('option');
+      opt.value = `${h.toString().padStart(2,'0')}:${m}`;
+      opt.textContent = opt.value;
+      timeSelect.append(opt);
+    });
 
     let current = 0;
     function validateStep(i) {
@@ -111,6 +115,13 @@
                           (addressCont.style.display==='none' || addressInput.value.trim()!=='');
       else if (i===3) ok = true;
       btnNext[i] && (btnNext[i].disabled = !ok);
+      if (tg && tg.MainButton) {
+        if (i === steps.length - 1) {
+          tg.MainButton.setText("Записаться").show();
+        } else {
+          tg.MainButton.hide();
+        }
+      }
     }
 
     function showStep(i) {
@@ -161,8 +172,6 @@
     }
 
     if (tg && tg.MainButton) {
-      tg.MainButton.setText("Записаться");
-      tg.MainButton.show();
       tg.MainButton.onClick(finish);
     }
   </script>
