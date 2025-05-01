@@ -25,23 +25,22 @@
       background-image: url("background.png");
       background-size: cover;
       background-position: center;
-      /* убрали flex‐центрирование */
     }
-    /* контейнер */
+    /* обёртка с нативным инерционным скроллом на iOS */
     .wrapper {
       height: 100%;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       display: flex;
       justify-content: center;
       padding: 20px 0;
     }
-    /* при открытой клавиатуре (mobile) поднимаем наверх */
+    /* при открытой клавиатуре поднимаем содержимое */
     body.keyboard-open .wrapper {
       justify-content: flex-start;
-      padding-top:    env(safe-area-inset-top,20px);
+      padding-top: env(safe-area-inset-top,20px);
       padding-bottom: env(safe-area-inset-bottom,20px);
     }
-
     .wizard {
       background: var(--black);
       border-radius: 12px;
@@ -93,11 +92,8 @@
       border-radius: 4px;
       background: #222;
       color: var(--white);
-
-      /* чтобы iOS не зумил при фокусе */
-      font-size: 18px;
+      font-size: 18px; /* чтобы iOS не зумил */
     }
-
     .wizard textarea { resize: vertical; }
     .wizard .buttons {
       display: flex;
@@ -173,108 +169,93 @@
         </div>
       </div>
 
-<!-- Шаг 3: подробности -->
-<div class="step" data-step="3">
-  <h2>3. Подробности</h2>
+      <!-- Шаг 3: подробности -->
+      <div class="step" data-step="3">
+        <h2>3. Подробности</h2>
 
-  <label>Количество человек:
-    <input
-      id="count"
-      type="number"
-      min="1"
-      inputmode="numeric"
-      placeholder="– введите число –"
-    >
-  </label>
+        <label>Количество человек:
+          <input
+            id="count"
+            type="number"
+            min="1"
+            inputmode="numeric"
+            placeholder="– введите число –"
+          >
+        </label>
 
-  <label id="address-container" style="display:none;">
-    Адрес (для выезда):
-    <input type="text" id="address">
-  </label>
+        <label id="address-container" style="display:none;">
+          Адрес (для выезда):
+          <input type="text" id="address">
+        </label>
 
-  <label>Программа:
-    <select id="program">
-      <option value="">– выберите –</option>
-      <option value="classic">Классика</option>
-      <option value="musicality">Музыкалити</option>
-      <option value="battle">Battle Show</option>
-      <option value="lotto">Музыкальное лото</option>
-      <option value="kids">Детский формат</option>
-      <option value="quiz">Квиз-мафия</option>
-      <option value="21plus">21+</option>
-    </select>
-  </label>
+        <label>Программа:
+          <select id="program">
+            <option value="">– выберите –</option>
+            <option value="classic">Классика</option>
+            <option value="musicality">Музыкалити</option>
+            <option value="battle">Battle Show</option>
+            <option value="lotto">Музыкальное лото</option>
+            <option value="kids">Детский формат</option>
+            <option value="quiz">Квиз-мафия</option>
+            <option value="21plus">21+</option>
+          </select>
+        </label>
 
-  <label>Средний возраст:
-    <select id="age">
-      <option value="">– выберите –</option>
-      <option value="7-12">7–12</option>
-      <option value="13-17">13–17</option>
-      <option value="18-30">18–30</option>
-      <option value="31-45">31–45</option>
-      <option value="45+">45+</option>
-    </select>
-  </label>
+        <label>Средний возраст:
+          <select id="age">
+            <option value="">– выберите –</option>
+            <option value="7-12">7–12</option>
+            <option value="13-17">13–17</option>
+            <option value="18-30">18–30</option>
+            <option value="31-45">31–45</option>
+            <option value="45+">45+</option>
+          </select>
+        </label>
 
-  <label>Сколько раз были у нас:
-    <select id="visits">
-      <option value="">– выберите –</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5+">5+</option>
-    </select>
-  </label>
+        <label>Сколько раз были у нас:
+          <select id="visits">
+            <option value="">– выберите –</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5+">5+</option>
+          </select>
+        </label>
 
-<label>Повод праздника:
-  <select id="occasion">
-    <option value="">– выберите –</option>
-    <option value="birthday">День рождения</option>
-    <option value="corporate">Корпоратив</option>
-    <option value="stag">Мальчишник</option>
-    <option value="bachelorette">Девичник</option>
-    <option value="friends">Встреча с друзьями</option>
-    <option value="graduation">Выпускной</option>
-    <option value="nature">Поездка на природу</option>
-    <option value="wedding">Свадьба</option>
-    <option value="other">Иное</option>
-  </select>
-</label>
+        <label>Повод праздника:
+          <select id="occasion">
+            <option value="">– выберите –</option>
+            <option value="birthday">День рождения</option>
+            <option value="corporate">Корпоратив</option>
+            <option value="stag">Мальчишник</option>
+            <option value="bachelorette">Девичник</option>
+            <option value="friends">Встреча с друзьями</option>
+            <option value="graduation">Выпускной</option>
+            <option value="nature">Поездка на природу</option>
+            <option value="wedding">Свадьба</option>
+            <option value="other">Иное</option>
+          </select>
+        </label>
 
-  <div class="buttons">
-    <button class="btn-prev">← Назад</button>
-    <button class="btn-next" disabled>Далее →</button>
-  </div>
-</div>
+        <div class="buttons">
+          <button class="btn-prev">← Назад</button>
+          <button class="btn-next" disabled>Далее →</button>
+        </div>
+      </div>
 
       <!-- Шаг 4 -->
       <div class="step" data-step="4">
         <h2>4. Дополнительные услуги</h2>
         <div id="extras-container">
-          <label class="extra-restroom">
-            <input type="checkbox" name="extras" value="restroom">
-            Комната отдыха
-          </label>
-          <label class="extra-photographer">
-            <input type="checkbox" name="extras" value="photographer">
-            Фотограф
-          </label>
-          <label class="extra-videographer">
-            <input type="checkbox" name="extras" value="videographer">
-            Видеограф
-          </label>
-          <label class="extra-disco">
-            <input type="checkbox" name="extras" value="disco">
-            Дискотека
-          </label>
+          <label><input type="checkbox" name="extras" value="restroom"> Комната отдыха</label>
+          <label><input type="checkbox" name="extras" value="photographer"> Фотограф</label>
+          <label><input type="checkbox" name="extras" value="videographer"> Видеограф</label>
+          <label><input type="checkbox" name="extras" value="disco"> Дискотека</label>
         </div>
         <label style="display:block; margin-top:12px; color:var(--white);">
           Ваши пожелания (необязательно):
           <textarea id="wishes" rows="3"
-            style="width:100%; padding:8px; margin-top:4px;
-                   background:#222; border:1px solid #444;
-                   color:#fff; border-radius:4px;"
             placeholder="Например: хотелось бы торт или музыкальную открытку…"
           ></textarea>
         </label>
@@ -299,32 +280,32 @@
     // Telegram WebApp ready
     if (window.Telegram?.WebApp) Telegram.WebApp.ready();
 
-    // подгоняем высоту
+    // Подгоняем высоту под клавиатуру
     function adjustHeight() {
-      document.body.style.height = (window.visualViewport?.height || window.innerHeight) + 'px';
+      document.body.style.height =
+        (window.visualViewport?.height || window.innerHeight) + 'px';
     }
     window.visualViewport?.addEventListener('resize', adjustHeight);
     adjustHeight();
 
-    // отслеживаем клаву
+    // Отслеживаем клавиатуру
     window.visualViewport?.addEventListener('resize', () => {
       const open = window.visualViewport.height < window.innerHeight;
       document.body.classList.toggle('keyboard-open', open);
     });
 
-    // автоскролл и expand при фокусе
-    document.querySelectorAll('input, textarea, select')
-      .forEach(el => {
-        el.addEventListener('focus', () => {
-          if (window.Telegram?.WebApp) Telegram.WebApp.expand();
-          setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
-        });
-        el.addEventListener('blur', () => {
-          document.body.classList.remove('keyboard-open');
-        });
+    // Автоскролл + expand при фокусе
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      el.addEventListener('focus', () => {
+        if (window.Telegram?.WebApp) Telegram.WebApp.expand();
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
       });
+      el.addEventListener('blur', () => {
+        document.body.classList.remove('keyboard-open');
+      });
+    });
 
-    // ваш шаговый интерфейс (не трогал)
+    // Шаговый интерфейс
     const steps = [...document.querySelectorAll('.step')];
     let current = 0;
     const timeSelect = document.getElementById('time-select');
@@ -337,72 +318,94 @@
     const visitsEl   = document.getElementById('visits');
     const occasionEl = document.getElementById('occasion');
 
-    // заполняем селект времени
-    for (let h=9; h<=22; h++){
-      ['00','30'].forEach(m=>{
-        if(h===22 && m==='30') return;
+    // Заполняем селект времени
+    for (let h = 9; h <= 22; h++) {
+      ['00','30'].forEach(m => {
+        if (h===22 && m==='30') return;
         const opt = document.createElement('option');
         opt.value = `${h.toString().padStart(2,'0')}:${m}`;
         opt.textContent = opt.value;
         timeSelect.append(opt);
       });
     }
-    flatpickr(datePicker, { dateFormat:'d.m.Y', minDate:'today', onChange:()=>validateStep(1) });
 
-    function showStep(i){
-      steps.forEach((s,idx)=>s.classList.toggle('active', idx===i));
+    flatpickr(datePicker, {
+      dateFormat: 'd.m.Y',
+      minDate: 'today',
+      onChange: () => validateStep(1)
+    });
+
+    function showStep(i) {
+      steps.forEach((s, idx) => s.classList.toggle('active', idx===i));
       current = i; validateStep(i);
       const mode = document.querySelector('input[name="mode"]:checked')?.value;
-      addrCont.style.display = mode==='outdoor' ? 'block' : 'none';
-      if(i===3) {
-        document.querySelector('.extra-restroom').style.display = mode==='studio' ? 'flex' : 'none';
+      addrCont.style.display = (mode==='outdoor') ? 'block' : 'none';
+      if (i===3) {
+        document.querySelector('.extra-restroom').style.display =
+          (mode==='studio') ? 'flex' : 'none';
       }
     }
-    function validateStep(i){
-      const btn = steps[i].querySelector('.btn-next'), v = i;
+
+    function validateStep(i) {
+      const btn = steps[i].querySelector('.btn-next');
       let ok = false;
-      if(v===0) ok = !!document.querySelector('input[name="mode"]:checked');
-      else if(v===1) ok = !!datePicker.value && !!timeSelect.value;
-      else if(v===2) {
-        ok = Number(countEl.value)>0 && !!programEl.value
-          && Number(ageEl.value)>0 && Number(visitsEl.value)>=0
-          && occasionEl.value.trim()!==''
-          && (addrCont.style.display==='none' || addrInput.value.trim()!=='');
+      if (i===0) ok = !!document.querySelector('input[name="mode"]:checked');
+      else if (i===1) ok = !!datePicker.value && !!timeSelect.value;
+      else if (i===2) {
+        ok = Number(countEl.value)>0 &&
+             !!programEl.value &&
+             !!ageEl.value &&
+             !!visitsEl.value &&
+             !!occasionEl.value &&
+             (addrCont.style.display==='none' || addrInput.value.trim()!=='');
       } else ok = true;
       btn.disabled = !ok;
     }
-    document.querySelectorAll('.btn-next').forEach(b=>b.onclick=()=>{
-      if(current<steps.length-1) showStep(current+1);
-      else finish();
+
+    document.querySelectorAll('.btn-next').forEach(b =>
+      b.addEventListener('click', () => {
+        if (current<steps.length-1) showStep(current+1);
+        else finish();
+      })
+    );
+    document.querySelectorAll('.btn-prev').forEach(b =>
+      b.addEventListener('click', () => {
+        if (current>0) showStep(current-1);
+      })
+    );
+
+    // реагируем на изменения на всех полях
+    steps.forEach((st, i) => {
+      st.addEventListener('input',  () => validateStep(i));
+      st.addEventListener('change', () => validateStep(i));
     });
-    document.querySelectorAll('.btn-prev').forEach(b=>b.onclick=()=>{
-      if(current>0) showStep(current-1);
-    });
-    steps.forEach((s,i)=>{
-      s.oninput = ()=>validateStep(i);
-      s.onchange = ()=>validateStep(i);
-    });
-    document.querySelectorAll('input[name="mode"]').forEach(r=>r.onchange=()=>validateStep(0));
+    // и отдельно — валидация при смене occasion
+    occasionEl.addEventListener('change', () => validateStep(2));
+
+    // начальная валидация
     validateStep(0);
 
-    function finish(){
-      const extras = [...document.querySelectorAll('input[name="extras"]:checked')].map(ch=>ch.value);
+    function finish() {
+      const extras = [...document.querySelectorAll('input[name="extras"]:checked')]
+        .map(ch => ch.value);
       const data = {
-        mode: document.querySelector('input[name="mode"]:checked').value,
-        date: datePicker.value,
-        time: timeSelect.value,
-        count: countEl.value,
-        address: addrInput.value||'',
-        program: programEl.value,
-        age: ageEl.value,
-        visits: visitsEl.value,
+        mode:     document.querySelector('input[name="mode"]:checked').value,
+        date:     datePicker.value,
+        time:     timeSelect.value,
+        count:    countEl.value,
+        address:  addrInput.value || '',
+        program:  programEl.value,
+        age:      ageEl.value,
+        visits:   visitsEl.value,
         occasion: occasionEl.value,
         extras,
-        wishes: document.getElementById('wishes').value.trim()
+        wishes:   document.getElementById('wishes').value.trim()
       };
-      if(window.Telegram?.WebApp?.sendData){
-        Telegram.WebApp.sendData(JSON.stringify({action:'booking',payload:data}));
-      } else console.log('Mock send:', data);
+      if (window.Telegram?.WebApp?.sendData) {
+        Telegram.WebApp.sendData(JSON.stringify({ action:'booking', payload:data }));
+      } else {
+        console.log('Mock send:', data);
+      }
       steps[current].innerHTML = `
         <p style="color:white;text-align:center;padding:40px 20px;line-height:1.5;">
           Спасибо!<br>С вами свяжется администратор.
