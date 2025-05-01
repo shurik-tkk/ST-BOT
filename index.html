@@ -168,7 +168,6 @@
         }
       };
       // всегда проверка
-      alert('DEBUG: отправка данных!\n'+JSON.stringify(payload, null, 2));
       if (tg) {
         tg.sendData(JSON.stringify(payload));
         setTimeout(() => tg.close(), 100);
