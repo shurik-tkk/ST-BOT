@@ -173,48 +173,80 @@
         </div>
       </div>
 
-      <!-- Шаг 3 -->
-      <div class="step" data-step="3">
-        <h2>3. Подробности</h2>
-        <label>Количество человек:
-          <input
-            id="count"
-            type="tel"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            placeholder="– введите число –"
-          >
-        </label>
-        <label id="address-container" style="display:none;">
-          Адрес (для выезда):
-          <input type="text" id="address">
-        </label>
-        <label>Программа:
-          <select id="program">
-            <option value="">– выберите –</option>
-            <option value="classic">Классика</option>
-            <option value="musicality">Музыкалити</option>
-            <option value="battle">Battle Show</option>
-            <option value="lotto">Музыкальное лото</option>
-            <option value="kids">Детский формат</option>
-            <option value="quiz">Квиз-мафия</option>
-            <option value="21plus">21+</option>
-          </select>
-        </label>
-        <label>Средний возраст:
-          <input type="number" id="age" min="1" value="18">
-        </label>
-        <label>Сколько раз были у нас:
-          <input type="number" id="visits" min="0" value="0">
-        </label>
-        <label>Повод праздника:
-          <textarea id="occasion" rows="2"></textarea>
-        </label>
-        <div class="buttons">
-          <button class="btn-prev">← Назад</button>
-          <button class="btn-next" disabled>Далее →</button>
-        </div>
-      </div>
+<!-- Шаг 3: подробности -->
+<div class="step" data-step="3">
+  <h2>3. Подробности</h2>
+
+  <label>Количество человек:
+    <input
+      id="count"
+      type="number"
+      min="1"
+      inputmode="numeric"
+      placeholder="– введите число –"
+    >
+  </label>
+
+  <label id="address-container" style="display:none;">
+    Адрес (для выезда):
+    <input type="text" id="address">
+  </label>
+
+  <label>Программа:
+    <select id="program">
+      <option value="">– выберите –</option>
+      <option value="classic">Классика</option>
+      <option value="musicality">Музыкалити</option>
+      <option value="battle">Battle Show</option>
+      <option value="lotto">Музыкальное лото</option>
+      <option value="kids">Детский формат</option>
+      <option value="quiz">Квиз-мафия</option>
+      <option value="21plus">21+</option>
+    </select>
+  </label>
+
+  <label>Средний возраст:
+    <select id="age">
+      <option value="">– выберите –</option>
+      <option value="7-12">7–12</option>
+      <option value="13-17">13–17</option>
+      <option value="18-30">18–30</option>
+      <option value="31-45">31–45</option>
+      <option value="45+">45+</option>
+    </select>
+  </label>
+
+  <label>Сколько раз были у нас:
+    <select id="visits">
+      <option value="">– выберите –</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5+">5+</option>
+    </select>
+  </label>
+
+<label>Повод праздника:
+  <select id="occasion">
+    <option value="">– выберите –</option>
+    <option value="birthday">День рождения</option>
+    <option value="corporate">Корпоратив</option>
+    <option value="stag">Мальчишник</option>
+    <option value="bachelorette">Девичник</option>
+    <option value="friends">Встреча с друзьями</option>
+    <option value="graduation">Выпускной</option>
+    <option value="nature">Поездка на природу</option>
+    <option value="wedding">Свадьба</option>
+    <option value="other">Иное</option>
+  </select>
+</label>
+
+  <div class="buttons">
+    <button class="btn-prev">← Назад</button>
+    <button class="btn-next" disabled>Далее →</button>
+  </div>
+</div>
 
       <!-- Шаг 4 -->
       <div class="step" data-step="4">
