@@ -30,8 +30,8 @@
     <header><img src="logo.png" alt="Show Today"></header>
     <div class="step active" data-step="1">
       <h2>1. Выберите формат</h2>
-      <label><input type="radio" name="mode" value="studio">В студии</label>
-      <label><input type="radio" name="mode" value="outdoor">Выезд</label>
+      <label><input type="radio" name="mode" value="studio"> В студии</label>
+      <label><input type="radio" name="mode" value="outdoor"> Выезд</label>
       <div class="buttons">
         <button class="btn-prev" disabled>← Назад</button>
         <button class="btn-next" disabled>Далее →</button>
@@ -39,8 +39,8 @@
     </div>
     <div class="step" data-step="2">
       <h2>2. Дата и время</h2>
-      <label>Дата:<input id="date-picker" readonly placeholder="– выберите дату –"></label>
-      <label>Время:<select id="time-select"><option value="">– выберите время –</option></select></label>
+      <label>Дата: <input id="date-picker" readonly placeholder="– выберите дату –"></label>
+      <label>Время: <select id="time-select"><option value="">– выберите время –</option></select></label>
       <div class="buttons">
         <button class="btn-prev">← Назад</button>
         <button class="btn-next" disabled>Далее →</button>
@@ -48,12 +48,12 @@
     </div>
     <div class="step" data-step="3">
       <h2>3. Подробности</h2>
-      <label>Количество:<input type="text" id="count" inputmode="numeric" pattern="\d*" placeholder="1"></label>
-      <label id="address-container" style="display:none;">Адрес:<input type="text" id="address"></label>
-      <label>Программа:<select id="program"><option value="">– выберите –</option><option value="classic">Классика</option><option value="musicality">Музыкалити</option><option value="battle">Battle Show</option><option value="lotto">Музыкальное лото</option><option value="kids">Детский формат</option><option value="quiz">Квиз-мафия</option><option value="21plus">21+</option></select></label>
-      <label>Возраст:<select id="age"><option value="">– выберите –</option><option>7-12</option><option>13-17</option><option>18-30</option><option>31-45</option><option>45+</option></select></label>
-      <label>Визиты:<select id="visits"><option value="">– выберите –</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></label>
-      <label>Повод:<select id="occasion"><option value="">– выберите –</option><option>день рождения</option><option>корпоратив</option><option>мальчишник</option><option>девичник</option><option>встреча с друзьями</option><option>выпускной</option><option>поездка на природу</option><option>свадьба</option><option>иное</option></select></label>
+      <label>Количество: <input type="text" id="count" inputmode="numeric" pattern="\d*" placeholder="1"></label>
+      <label id="address-container" style="display:none;">Адрес: <input type="text" id="address"></label>
+      <label>Программа: <select id="program"><option value="">– выберите –</option><option value="classic">Классика</option><option value="musicality">Музыкалити</option><option value="battle">Battle Show</option><option value="lotto">Лото</option><option value="kids">Детский</option><option value="quiz">Квиз-мафия</option><option value="21plus">21+</option></select></label>
+      <label>Возраст: <select id="age"><option value="">– выберите –</option><option>7-12</option><option>13-17</option><option>18-30</option><option>31-45</option><option>45+</option></select></label>
+      <label>Визиты: <select id="visits"><option value="">– выберите –</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></label>
+      <label>Повод: <select id="occasion"><option value="">– выберите –</option><option>день рождения</option><option>корпоратив</option><option>мальчишник</option><option>девичник</option><option>встреча с друзьями</option><option>выпускной</option><option>поездка на природу</option><option>свадьба</option><option>иное</option></select></label>
       <div class="buttons">
         <button class="btn-prev">← Назад</button>
         <button class="btn-next" disabled>Далее →</button>
@@ -62,10 +62,10 @@
     <div class="step" data-step="4">
       <h2>4. Доп. услуги & пожелания</h2>
       <div id="extras-container">
-        <label><input type="checkbox" name="extras" value="restroom">Комната отдыха</label>
-        <label><input type="checkbox" name="extras" value="photographer">Фотограф</label>
-        <label><input type="checkbox" name="extras" value="videographer">Видеограф</label>
-        <label><input type="checkbox" name="extras" value="disco">Дискотека</label>
+        <label><input type="checkbox" name="extras" value="restroom"> Комната отдыха</label>
+        <label><input type="checkbox" name="extras" value="photographer"> Фотограф</label>
+        <label><input type="checkbox" name="extras" value="videographer"> Видеограф</label>
+        <label><input type="checkbox" name="extras" value="disco"> Дискотека</label>
       </div>
       <label>Пожелания:<textarea id="wishes" rows="3" placeholder="…" style="width:100%;padding:8px;background:#222;color:#fff;border:1px solid #444;border-radius:4px;resize:vertical;margin-top:4px;"></textarea></label>
       <div class="buttons">
@@ -77,12 +77,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
-    // Guard Telegram
-    const tg = (typeof Telegram !== 'undefined' && Telegram.WebApp) ? Telegram.WebApp : null;
+    // Инициализация
+    const tg = (window.Telegram && Telegram.WebApp) ? Telegram.WebApp : null;
     if(tg) tg.ready();
 
-    // Elements
-    const steps = document.querySelectorAll('.step');
+    const steps = Array.from(document.querySelectorAll('.step'));
     const btnNext = document.querySelectorAll('.btn-next');
     const btnPrev = document.querySelectorAll('.btn-prev');
     const datePicker = document.getElementById('date-picker');
@@ -95,55 +94,68 @@
     const visits = document.getElementById('visits');
     const occasion = document.getElementById('occasion');
 
-    // Flatpickr
+    // Настройка flatpickr и времени
     flatpickr(datePicker, { dateFormat:'d.m.Y', minDate:'today', onChange:()=>validateStep(1) });
-    // Generate time options
-    for(let h=9; h<=22; h++){['00','30'].forEach(m=>{ if(h===22&&m==='30') return; const opt=document.createElement('option'); opt.value=`${h.toString().padStart(2,'0')}:${m}`; opt.textContent=opt.value; timeSelect.append(opt); });}
+    for(let h=9; h<=22; h++){
+      ['00','30'].forEach(m=>{
+        if(h===22 && m==='30') return;
+        const opt = document.createElement('option');
+        opt.value = `${h.toString().padStart(2,'0')}:${m}`;
+        opt.textContent = opt.value;
+        timeSelect.append(opt);
+      });
+    }
 
     let current = 0;
     function validateStep(i){
-      let ok=false;
-      if(i===0) ok=!!document.querySelector('input[name="mode"]:checked');
-      if(i===1) ok=!!datePicker.value && !!timeSelect.value;
-      if(i===2) ok=Number(count.value)>0 && !!program.value && !!age.value && !!visits.value && !!occasion.value && (addressContainer.style.display==='none' || address.value.trim()!=='');
-      if(i===3) ok=true;
+      let ok = false;
+      if(i===0) ok = !!document.querySelector('input[name="mode"]:checked');
+      else if(i===1) ok = !!datePicker.value && !!timeSelect.value;
+      else if(i===2) ok = Number(count.value)>0 && !!program.value && !!age.value && !!visits.value && !!occasion.value &&
+                       (addressContainer.style.display==='none' || address.value.trim()!=='');
+      else if(i===3) ok = true;
       steps[i].querySelector('.btn-next').disabled = !ok;
     }
 
-    // Navigation
-    function showStep(i){
-      steps.forEach((s,idx)=>s.classList.toggle('active',idx===i));
-      current=i; validateStep(i);
-      // Toggle address field
-      const mode = document.querySelector('input[name="mode"]:checked')?.value;
-      addressContainer.style.display = (mode==='outdoor')?'block':'none';
-    }
-    btnNext.forEach((b,idx)=>b.addEventListener('click',()=> idx<steps.length-1?showStep(idx+1):finish() ));
-    btnPrev.forEach((b,idx)=>b.addEventListener('click',()=> idx>0 && showStep(idx-1) ));
-
-    // Triggers
+    // Обработчики изменения полей
     document.querySelectorAll('input[name="mode"]').forEach(r=>r.addEventListener('change',()=>validateStep(0)));
     datePicker.addEventListener('change',()=>validateStep(1)); timeSelect.addEventListener('change',()=>validateStep(1));
-    count.addEventListener('input',()=>validateStep(2)); program.addEventListener('change',()=>validateStep(2)); age.addEventListener('change',()=>validateStep(2)); visits.addEventListener('change',()=>validateStep(2)); occasion.addEventListener('change',()=>validateStep(2));
+    count.addEventListener('input',()=>validateStep(2)); program.addEventListener('change',()=>validateStep(2));
+    age.addEventListener('change',()=>validateStep(2)); visits.addEventListener('change',()=>validateStep(2));
+    occasion.addEventListener('change',()=>validateStep(2));
 
-    validateStep(0);
+    // Навигация
+    function showStep(i){
+      steps.forEach((s, idx)=>s.classList.toggle('active', idx===i));
+      current = i; validateStep(i);
+      // Адрес для выезда
+      const mode = document.querySelector('input[name="mode"]:checked')?.value;
+      addressContainer.style.display = (mode==='outdoor') ? 'block' : 'none';
+    }
+    btnNext.forEach((b, idx)=> b.addEventListener('click', ()=> idx<steps.length-1 ? showStep(idx+1) : finish() ));
+    btnPrev.forEach((b, idx)=> b.addEventListener('click', ()=> idx>0 && showStep(idx-1) ));
+
+    showStep(0);
 
     // MainButton
-    if(tg){
-      tg.MainButton.setText('Записаться'); tg.MainButton.show(); tg.MainButton.onClick(finish);
-    }
+    if(tg){ tg.MainButton.setText('Записаться'); tg.MainButton.show(); tg.MainButton.onClick(finish); }
 
+    // Функция отправки
     function finish(){
+      // Всегда показываем alert, чтобы подтвердить вызов
       const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(i=>i.value);
-      const data = { action:'booking', payload:{
-        mode:document.querySelector('input[name="mode"]:checked').value,
-        date:datePicker.value, time:timeSelect.value,
-        count:count.value, address:address.value||'', program:program.value,
-        age:age.value, visits:visits.value, occasion:occasion.value,
-        extras:extras, wishes:document.getElementById('wishes').value.trim()
-      }};
+      const data = {
+        action:'booking', payload:{
+          mode: document.querySelector('input[name="mode"]:checked').value,
+          date: datePicker.value, time: timeSelect.value,
+          count: count.value, address: address.value||'', program: program.value,
+          age: age.value, visits: visits.value, occasion: occasion.value,
+          extras: extras, wishes: document.getElementById('wishes').value.trim()
+        }
+      };
+      alert('DEBUG: finish() вызвана!\n'+JSON.stringify(data, null, 2));
       if(tg){ tg.sendData(JSON.stringify(data)); tg.close(); }
-      else console.log('Mock sendData',data);
+      else console.log('Mock sendData', data);
     }
   </script>
 </body>
