@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Запрет масштабирования на мобильных, чтобы iOS/Safari не зумил -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Show Today — Бронирование</title>
   <!-- Flatpickr CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -37,7 +38,8 @@
     /* при открытой клавиатуре (mobile) поднимаем наверх */
     body.keyboard-open .wrapper {
       justify-content: flex-start;
-      padding-top: env(safe-area-inset-top,20px);
+      padding-top:    env(safe-area-inset-top,20px);
+      padding-bottom: env(safe-area-inset-bottom,20px);
     }
 
     .wizard {
@@ -91,7 +93,11 @@
       border-radius: 4px;
       background: #222;
       color: var(--white);
+
+      /* чтобы iOS не зумил при фокусе */
+      font-size: 18px;
     }
+
     .wizard textarea { resize: vertical; }
     .wizard .buttons {
       display: flex;
@@ -171,7 +177,13 @@
       <div class="step" data-step="3">
         <h2>3. Подробности</h2>
         <label>Количество человек:
-          <input type="number" id="count" min="1" value="1">
+          <input
+            id="count"
+            type="tel"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            placeholder="– введите число –"
+          >
         </label>
         <label id="address-container" style="display:none;">
           Адрес (для выезда):
@@ -250,7 +262,7 @@
     onclick="document.activeElement.blur()"
   >Готово</button>
 
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.js"></script>
   <script>
     // Telegram WebApp ready
     if (window.Telegram?.WebApp) Telegram.WebApp.ready();
@@ -280,7 +292,7 @@
         });
       });
 
-    // логика шагового интерфейса (не трогал, как было у вас)
+    // ваш шаговый интерфейс (не трогал)
     const steps = [...document.querySelectorAll('.step')];
     let current = 0;
     const timeSelect = document.getElementById('time-select');
@@ -322,7 +334,7 @@
       else if(v===2) {
         ok = Number(countEl.value)>0 && !!programEl.value
           && Number(ageEl.value)>0 && Number(visitsEl.value)>=0
-          && occasionEl.value.trim()!=='' 
+          && occasionEl.value.trim()!==''
           && (addrCont.style.display==='none' || addrInput.value.trim()!=='');
       } else ok = true;
       btn.disabled = !ok;
@@ -353,7 +365,8 @@
         age: ageEl.value,
         visits: visitsEl.value,
         occasion: occasionEl.value,
-        extras, wishes: document.getElementById('wishes').value.trim()
+        extras,
+        wishes: document.getElementById('wishes').value.trim()
       };
       if(window.Telegram?.WebApp?.sendData){
         Telegram.WebApp.sendData(JSON.stringify({action:'booking',payload:data}));
