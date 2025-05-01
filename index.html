@@ -73,9 +73,9 @@
       </div>
       <label>Пожелания:<textarea id="wishes" rows="3" placeholder="…" style="width:100%;padding:8px;background:#222;color:#fff;border:1px solid #444;border-radius:4px;resize:vertical;margin-top:4px;"></textarea></label>
       <div class="buttons">
-        <button class="btn-prev">← Назад</button>
-        <button class="btn-next" id="finish-btn">Записаться</button>
-      </div>
+  <button class="btn-prev">← Назад</button>
+</div>
+<!-- Кнопка Telegram появится снизу -->
     </div>
   </div>
 
@@ -87,7 +87,7 @@
 
     // Элементы и шаги
     const steps = Array.from(document.querySelectorAll('.step'));
-    const btnNext = steps.map(s => s.querySelector('.btn-next'));
+    const btnNext = steps.map(s => s.querySelector('.btn-next')).filter(Boolean);
     const btnPrev = steps.map(s => s.querySelector('.btn-prev'));
     const datePicker  = document.getElementById('date-picker');
     const timeSelect  = document.getElementById('time-select');
