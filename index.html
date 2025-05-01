@@ -270,13 +270,7 @@
   </div>
 </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script>
-    // Telegram WebApp готов
-    if (window.Telegram && Telegram.WebApp) {
-      Telegram.WebApp.ready();
-    }
-    // Подгоняем высоту под клавиатуру
+  высоту под клавиатуру
     function adjustHeight() {
       document.body.style.height = (window.visualViewport?.height || window.innerHeight) + 'px';
     }
@@ -408,7 +402,13 @@ function finish() {
     wishes:   document.getElementById('wishes').value.trim()  // <-- добавили
   };
 
-  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.sendData) {
+    alert(
+    "DEBUG: finish() вызвана!\n\n" +
+    "Вот данные для отправки:\n" +
+    JSON.stringify(data, null, 2)
+  );
+
+if (window.Telegram && Telegram.WebApp && Telegram.WebApp.sendData) {
   console.log("→ payload to bot:", data);
     Telegram.WebApp.sendData(JSON.stringify({ action: 'booking', payload: data }));
   } else {
