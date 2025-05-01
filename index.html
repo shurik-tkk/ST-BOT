@@ -32,7 +32,6 @@
 <body>
   <div class="wizard">
     <header><img src="logo.png" alt="Show Today"></header>
-    <!-- Шаги -->
     <div class="step active" data-step="1">
       <h2>1. Выберите формат</h2>
       <label><input type="radio" name="mode" value="studio">В студии</label>
@@ -80,25 +79,19 @@
   <script>
     function adjustHeight() { document.body.style.height = (window.visualViewport?.height||window.innerHeight)+'px'; }
     window.visualViewport?.addEventListener('resize',adjustHeight); adjustHeight();
-    const steps=Array.from(document.querySelectorAll('.step')), timeSelect=document.getElementById('time-select'), datePicker=document.getElementById('date-picker'), count=document.getElementById('count'), addressContainer=document.getElementById('address-container'), address=document.getElementById('address'), program=document.getElementById('program'), age=document.getElementById('age'), visits=document.getElementById('visits'), occasion=document.getElementById('occasion'); let current=0;
+    const steps=Array.from(document.querySelectorAll('.step'));
+    let current=0;
+    const datePicker=document.getElementById('date-picker');
+    const timeSelect=document.getElementById('time-select');
+    const count=document.getElementById('count');
+    const addressContainer=document.getElementById('address-container');
+    const address=document.getElementById('address');
+    const program=document.getElementById('program');
+    const age=document.getElementById('age');
+    const visits=document.getElementById('visits');
+    const occasion=document.getElementById('occasion');
+    // время
     for(let h=9;h<=22;h++){['00','30'].forEach(m=>{if(h===22&&m==='30')return;const opt=document.createElement('option');opt.value=`${h.toString().padStart(2,'0')}:${m}`;opt.textContent=opt.value;timeSelect.append(opt);});}
     flatpickr('#date-picker',{dateFormat:'d.m.Y',minDate:'today',onChange:()=>validateStep(1)});
     function showStep(idx){steps.forEach((st,i)=>st.classList.toggle('active',i===idx));current=idx;validateStep(idx);const mode=document.querySelector('input[name="mode"]:checked')?.value;addressContainer.style.display=(mode==='outdoor'?'block':'none');if(idx===3){document.querySelector('.extra-restroom').style.display=(mode==='studio'?'flex':'none');}}
-    function validateStep(idx){const btn=steps[idx].querySelector('.btn-next');let ok=false;if(idx===0){ok=!!document.querySelector('input[name="mode"]:checked');}else if(idx===1){ok=!!datePicker.value&&!!timeSelect.value;}else if(idx===2){ok=(Number(count.value)>0&&!!program.value&&!!age.value&&!!visits.value&&!!occasion.value&&(addressContainer.style.display==='none'||address.value.trim()!==''));}else if(idx===3){ok=true;}btn.disabled=!ok;}
-    document.querySelectorAll('.btn-next').forEach(b=>b.addEventListener('click',()=>{if(current<steps.length-1)showStep(current+1);else finish();}));
-    document.querySelectorAll('.btn-prev').forEach(b=>b.addEventListener('click',()=>{if(current>0)showStep(current-1);}));
-    steps.forEach((st,i)=>{st.addEventListener('input',()=>validateStep(i));st.addEventListener('change',()=>validateStep(i));});
-    document.querySelectorAll('input[name="mode"]').forEach(r=>r.addEventListener('change',()=>validateStep(0)));
-    validateStep(0);
-    Telegram.WebApp.ready();
-    const mainBtn=Telegram.WebApp.MainButton;
-    mainBtn.setText('Записаться'); mainBtn.show(); mainBtn.onClick(finish);
-    function finish(){const extras=Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(ch=>ch.value);
-      const data={mode:document.querySelector('input[name="mode"]:checked').value,date:datePicker.value,time:timeSelect.value,count:count.value,address:address.value||'',program:program.value,age:age.value,visits:visits.value,occasion:occasion.value,extras:extras,wishes:document.getElementById('wishes').value.trim()};
-      alert('DEBUG: finish() вызвана!\n\nВот данные для отправки:\n'+JSON.stringify(data,null,2));
-      if(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.sendData){console.log('→ payload to bot:',data);Telegram.WebApp.sendData(JSON.stringify({action:'booking',payload:data}));}else{console.log('Mock sendData:',data);}      
-      steps[current].innerHTML='<p style="color:white;text-align:center;padding:40px 20px;line-height:1.5;">Спасибо!<br>С вами свяжется администратор для уточнения деталей.</p>';
-    }
-  </script>
-</body>
-</html>
+    function validateStep(idx){const btn=steps[idx].querySelector('.btn-next');let ok=false;if(idx===0){ok=!!document.querySelector('input[name="mode"]:checked');}else if(idx===1){ok=!!datePicker.value&&!!timeSelect.value;}else if(idx===2){ok=(Number(count.value)>0&&!!program.value&&!!age.value&&!!visits.value&&!!occasion.value&&(addressContainer.style.display==='none'||address.value.trim()!==''))
