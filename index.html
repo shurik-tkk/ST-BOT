@@ -74,8 +74,9 @@
       </div>
       <label>Пожелания:<textarea id="wishes" rows="3" placeholder="…"></textarea></label>
       <div class="buttons">
-        <button class="btn-prev">← Назад</button>
-      </div>
+  <button class="btn-prev">← Назад</button>
+  <button class="btn-next" id="finish-btn">Записаться</button>
+</div>
     </div>
   </div>
 
@@ -143,37 +144,39 @@
     visitsSel.addEventListener('change', ()=> validateStep(2));
     occasionSel.addEventListener('change', ()=> validateStep(2));
 
-    validateStep(0);
+validateStep(0);
 
-    function finish() {
-      const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(i=>i.value);
-      const payload = {
-        action: 'booking',
-        payload: {
-          mode: document.querySelector('input[name="mode"]:checked').value,
-          date: datePicker.value,
-          time: timeSelect.value,
-          count: countInput.value,
-          address: addressInput.value || '',
-          program: programSel.value,
-          age:     ageSel.value,
-          visits:  visitsSel.value,
-          occasion: occasionSel.value,
-          extras:  extras,
-          wishes:  document.getElementById('wishes').value.trim()
-        }
-      };
-      if (tg) {
-        tg.sendData(JSON.stringify(payload));
-        setTimeout(() => tg.close(), 100);
-      } else {
-        console.log('Mock sendData', payload);
-      }
+function finish() {
+  const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(i=>i.value);
+  const payload = {
+    action: 'booking',
+    payload: {
+      mode: document.querySelector('input[name="mode"]:checked').value,
+      date: datePicker.value,
+      time: timeSelect.value,
+      count: countInput.value,
+      address: addressInput.value || '',
+      program: programSel.value,
+      age:     ageSel.value,
+      visits:  visitsSel.value,
+      occasion: occasionSel.value,
+      extras:  extras,
+      wishes:  document.getElementById('wishes').value.trim()
     }
+  };
+  if (tg) {
+    tg.sendData(JSON.stringify(payload));
+    setTimeout(() => tg.close(), 100);
+  } else {
+    console.log('Mock sendData', payload);
+  }
+}
 
-    if (tg && tg.MainButton) {
-      tg.MainButton.onClick(finish);
-    }
+document.getElementById('finish-btn')?.addEventListener('click', finish); // <-- СЮДА перенесено
+
+if (tg && tg.MainButton) {
+  tg.MainButton.onClick(finish);
+}
   </script>
 </body>
 </html>
