@@ -7,26 +7,22 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <style>
     :root { --yellow:#ff0; --black:#0d0d0d; --white:#fff; --blue:#0042ff; }
-    * { box-sizing:border-box; margin:0; padding:0; }
-    html, body { height:100%; background:var(--yellow); font-family:"Segoe UI",sans-serif; }
-    body { background-image:url("background.png"); background-size:cover; background-position:center; display:flex; align-items:center; justify-content:center; padding:20px; }
-    .wizard { background:var(--black); border-radius:12px; width:100%; max-width:380px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.4); }
-    .wizard header { background:var(--yellow); text-align:center; padding:16px; }
-    .wizard header img { max-width:200px; height:auto; }
-    .wizard .step { padding:16px; display:none; color:var(--white); }
-    .wizard .step.active { display:block; }
-    .wizard .step h2 { margin-bottom:12px; font-size:1.1rem; }
-    .wizard label { display:flex; align-items:center; margin-bottom:8px; cursor:pointer; }
-    .wizard input[type="radio"], .wizard input[type="checkbox"] { accent-color:var(--yellow); margin-right:8px; width:18px; height:18px; }
-    .wizard input, .wizard select, .wizard textarea { width:100%; padding:8px; margin:4px 0 12px; border:1px solid #444; border-radius:4px; background:#222; color:var(--white); }
-    .wizard textarea { resize:vertical; }
-    .wizard .buttons { display:flex; justify-content:space-between; gap:8px; }
-    .wizard button { flex:1; padding:10px; font-size:1rem; border:none; border-radius:6px; cursor:pointer; }
-    .wizard .btn-next { background:var(--blue); color:var(--white); }
-    .wizard .btn-prev { background:#444; color:var(--white); }
-    .wizard button:disabled { opacity:0.5; cursor:default; }
-    .wizard .step[data-step="4"] #extras-container { display:flex; flex-direction:column; gap:8px; align-items:flex-start; max-width:90%; margin:0 auto 16px; }
-    .wizard .step[data-step="4"] #extras-container label { color:var(--white); }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;background:var(--yellow);font-family:"Segoe UI",sans-serif;}
+    body{background-image:url("background.png");background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;padding:20px;}
+    .wizard{background:var(--black);border-radius:12px;width:100%;max-width:380px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+    .wizard header{background:var(--yellow);text-align:center;padding:16px;}
+    .wizard header img{max-width:200px;height:auto;}
+    .step{display:none;padding:16px;color:var(--white);} .step.active{display:block;}
+    .step h2{margin-bottom:12px;font-size:1.1rem;}
+    label{display:flex;align-items:center;margin-bottom:8px;cursor:pointer;}
+    input[type=radio],input[type=checkbox]{accent-color:var(--yellow);margin-right:8px;width:18px;height:18px;}
+    input,select,textarea{width:100%;padding:8px;margin:4px 0 12px;border:1px solid #444;border-radius:4px;background:#222;color:var(--white);}
+    textarea{resize:vertical;}
+    .buttons{display:flex;justify-content:space-between;gap:8px;}
+    button{flex:1;padding:10px;font-size:1rem;border:none;border-radius:6px;cursor:pointer;}
+    .btn-next{background:var(--blue);color:#fff;} .btn-prev{background:#444;color:#fff;}
+    button:disabled{opacity:0.5;cursor:default;}
   </style>
 </head>
 <body>
@@ -52,46 +48,103 @@
     </div>
     <div class="step" data-step="3">
       <h2>3. Подробности</h2>
-      <label>Количество человек:<input type="text" id="count" inputmode="numeric" pattern="\d*" enterkeyhint="done" placeholder="1"></label>
-      <label id="address-container" style="display:none;">Адрес (для выезда):<input type="text" id="address"></label>
+      <label>Количество:<input type="text" id="count" inputmode="numeric" pattern="\d*" placeholder="1"></label>
+      <label id="address-container" style="display:none;">Адрес:<input type="text" id="address"></label>
       <label>Программа:<select id="program"><option value="">– выберите –</option><option value="classic">Классика</option><option value="musicality">Музыкалити</option><option value="battle">Battle Show</option><option value="lotto">Музыкальное лото</option><option value="kids">Детский формат</option><option value="quiz">Квиз-мафия</option><option value="21plus">21+</option></select></label>
-      <label>Средний возраст:<select id="age"><option value="">– выберите –</option><option value="7-12">7-12</option><option value="13-17">13-17</option><option value="18-30">18-30</option><option value="31-45">31-45</option><option value="45+">45+</option></select></label>
-      <label>Сколько раз были у нас:<select id="visits"><option value="">– выберите –</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5+">5+</option></select></label>
-      <label>Повод праздника:<select id="occasion"><option value="">– выберите –</option><option value="день рождения">день рождения</option><option value="корпоратив">корпоратив</option><option value="мальчишник">мальчишник</option><option value="девичник">девичник</option><option value="встреча с друзьями">встреча с друзьями</option><option value="выпускной">выпускной</option><option value="поездка на природу">поездка на природу</option><option value="свадьба">свадьба</option><option value="иное">иное</option></select></label>
+      <label>Возраст:<select id="age"><option value="">– выберите –</option><option>7-12</option><option>13-17</option><option>18-30</option><option>31-45</option><option>45+</option></select></label>
+      <label>Визиты:<select id="visits"><option value="">– выберите –</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></label>
+      <label>Повод:<select id="occasion"><option value="">– выберите –</option><option>день рождения</option><option>корпоратив</option><option>мальчишник</option><option>девичник</option><option>встреча с друзьями</option><option>выпускной</option><option>поездка на природу</option><option>свадьба</option><option>иное</option></select></label>
       <div class="buttons">
         <button class="btn-prev">← Назад</button>
         <button class="btn-next" disabled>Далее →</button>
       </div>
     </div>
     <div class="step" data-step="4">
-      <h2>4. Дополнительные услуги</h2>
+      <h2>4. Доп. услуги & пожелания</h2>
       <div id="extras-container">
         <label><input type="checkbox" name="extras" value="restroom">Комната отдыха</label>
         <label><input type="checkbox" name="extras" value="photographer">Фотограф</label>
         <label><input type="checkbox" name="extras" value="videographer">Видеограф</label>
         <label><input type="checkbox" name="extras" value="disco">Дискотека</label>
       </div>
-      <label style="display:block; margin-top:12px; color:var(--white);">Ваши пожелания (необязательно):<textarea id="wishes" rows="3" style="width:100%; padding:8px; margin-top:4px; background:#222; border:1px solid #444; color:#fff; border-radius:4px;" placeholder="Например: хотелось бы девочку ведущую…"></textarea></label>
-      <div class="buttons" style="margin-top:16px;"><button class="btn-prev">← Назад</button><button class="btn-next" id="finish-btn">Записаться</button></div>
+      <label>Пожелания:<textarea id="wishes" rows="3" placeholder="…" style="width:100%;padding:8px;background:#222;color:#fff;border:1px solid #444;border-radius:4px;resize:vertical;margin-top:4px;"></textarea></label>
+      <div class="buttons">
+        <button class="btn-prev">← Назад</button>
+        <button class="btn-next" id="finish-btn">Записаться</button>
+      </div>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
-    function adjustHeight() { document.body.style.height = (window.visualViewport?.height||window.innerHeight)+'px'; }
-    window.visualViewport?.addEventListener('resize',adjustHeight); adjustHeight();
-    const steps=Array.from(document.querySelectorAll('.step'));
-    let current=0;
-    const datePicker=document.getElementById('date-picker');
-    const timeSelect=document.getElementById('time-select');
-    const count=document.getElementById('count');
-    const addressContainer=document.getElementById('address-container');
-    const address=document.getElementById('address');
-    const program=document.getElementById('program');
-    const age=document.getElementById('age');
-    const visits=document.getElementById('visits');
-    const occasion=document.getElementById('occasion');
-    // время
-    for(let h=9;h<=22;h++){['00','30'].forEach(m=>{if(h===22&&m==='30')return;const opt=document.createElement('option');opt.value=`${h.toString().padStart(2,'0')}:${m}`;opt.textContent=opt.value;timeSelect.append(opt);});}
-    flatpickr('#date-picker',{dateFormat:'d.m.Y',minDate:'today',onChange:()=>validateStep(1)});
-    function showStep(idx){steps.forEach((st,i)=>st.classList.toggle('active',i===idx));current=idx;validateStep(idx);const mode=document.querySelector('input[name="mode"]:checked')?.value;addressContainer.style.display=(mode==='outdoor'?'block':'none');if(idx===3){document.querySelector('.extra-restroom').style.display=(mode==='studio'?'flex':'none');}}
-    function validateStep(idx){const btn=steps[idx].querySelector('.btn-next');let ok=false;if(idx===0){ok=!!document.querySelector('input[name="mode"]:checked');}else if(idx===1){ok=!!datePicker.value&&!!timeSelect.value;}else if(idx===2){ok=(Number(count.value)>0&&!!program.value&&!!age.value&&!!visits.value&&!!occasion.value&&(addressContainer.style.display==='none'||address.value.trim()!==''))
+    // Guard Telegram
+    const tg = (typeof Telegram !== 'undefined' && Telegram.WebApp) ? Telegram.WebApp : null;
+    if(tg) tg.ready();
+
+    // Elements
+    const steps = document.querySelectorAll('.step');
+    const btnNext = document.querySelectorAll('.btn-next');
+    const btnPrev = document.querySelectorAll('.btn-prev');
+    const datePicker = document.getElementById('date-picker');
+    const timeSelect = document.getElementById('time-select');
+    const count = document.getElementById('count');
+    const addressContainer = document.getElementById('address-container');
+    const address = document.getElementById('address');
+    const program = document.getElementById('program');
+    const age = document.getElementById('age');
+    const visits = document.getElementById('visits');
+    const occasion = document.getElementById('occasion');
+
+    // Flatpickr
+    flatpickr(datePicker, { dateFormat:'d.m.Y', minDate:'today', onChange:()=>validateStep(1) });
+    // Generate time options
+    for(let h=9; h<=22; h++){['00','30'].forEach(m=>{ if(h===22&&m==='30') return; const opt=document.createElement('option'); opt.value=`${h.toString().padStart(2,'0')}:${m}`; opt.textContent=opt.value; timeSelect.append(opt); });}
+
+    let current = 0;
+    function validateStep(i){
+      let ok=false;
+      if(i===0) ok=!!document.querySelector('input[name="mode"]:checked');
+      if(i===1) ok=!!datePicker.value && !!timeSelect.value;
+      if(i===2) ok=Number(count.value)>0 && !!program.value && !!age.value && !!visits.value && !!occasion.value && (addressContainer.style.display==='none' || address.value.trim()!=='');
+      if(i===3) ok=true;
+      steps[i].querySelector('.btn-next').disabled = !ok;
+    }
+
+    // Navigation
+    function showStep(i){
+      steps.forEach((s,idx)=>s.classList.toggle('active',idx===i));
+      current=i; validateStep(i);
+      // Toggle address field
+      const mode = document.querySelector('input[name="mode"]:checked')?.value;
+      addressContainer.style.display = (mode==='outdoor')?'block':'none';
+    }
+    btnNext.forEach((b,idx)=>b.addEventListener('click',()=> idx<steps.length-1?showStep(idx+1):finish() ));
+    btnPrev.forEach((b,idx)=>b.addEventListener('click',()=> idx>0 && showStep(idx-1) ));
+
+    // Triggers
+    document.querySelectorAll('input[name="mode"]').forEach(r=>r.addEventListener('change',()=>validateStep(0)));
+    datePicker.addEventListener('change',()=>validateStep(1)); timeSelect.addEventListener('change',()=>validateStep(1));
+    count.addEventListener('input',()=>validateStep(2)); program.addEventListener('change',()=>validateStep(2)); age.addEventListener('change',()=>validateStep(2)); visits.addEventListener('change',()=>validateStep(2)); occasion.addEventListener('change',()=>validateStep(2));
+
+    validateStep(0);
+
+    // MainButton
+    if(tg){
+      tg.MainButton.setText('Записаться'); tg.MainButton.show(); tg.MainButton.onClick(finish);
+    }
+
+    function finish(){
+      const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(i=>i.value);
+      const data = { action:'booking', payload:{
+        mode:document.querySelector('input[name="mode"]:checked').value,
+        date:datePicker.value, time:timeSelect.value,
+        count:count.value, address:address.value||'', program:program.value,
+        age:age.value, visits:visits.value, occasion:occasion.value,
+        extras:extras, wishes:document.getElementById('wishes').value.trim()
+      }};
+      if(tg){ tg.sendData(JSON.stringify(data)); tg.close(); }
+      else console.log('Mock sendData',data);
+    }
+  </script>
+</body>
+</html>
