@@ -6,6 +6,7 @@
   <title>Show Today — Бронирование</title>
   <!-- Flatpickr CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
   <style>
     :root {
       --yellow: #ff0;
@@ -13,13 +14,19 @@
       --white:  #fff;
       --blue:   #0042ff;
     }
-    * { box-sizing: border-box; margin:0; padding:0 }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       height: 100%;
       background: var(--yellow);
       font-family: "Segoe UI", sans-serif;
     }
-    /* обёртка для скролла и центрирования */
+    body {
+      background-image: url("background.png");
+      background-size: cover;
+      background-position: center;
+      /* убрали flex‐центрирование */
+    }
+    /* контейнер */
     .wrapper {
       height: 100%;
       overflow-y: auto;
@@ -27,11 +34,12 @@
       justify-content: center;
       padding: 20px 0;
     }
-    /* когда клавиатура открыта — прижимаем вверх */
+    /* при открытой клавиатуре (mobile) поднимаем наверх */
     body.keyboard-open .wrapper {
       justify-content: flex-start;
-      padding-top: env(safe-area-inset-top, 20px);
+      padding-top: env(safe-area-inset-top,20px);
     }
+
     .wizard {
       background: var(--black);
       border-radius: 12px;
@@ -55,7 +63,7 @@
       display: none;
       color: var(--white);
     }
-    .wizard .step.active { display: block }
+    .wizard .step.active { display: block; }
     .wizard .step h2 {
       margin-bottom: 12px;
       font-size: 1.1rem;
@@ -84,7 +92,7 @@
       background: #222;
       color: var(--white);
     }
-    .wizard textarea { resize: vertical }
+    .wizard textarea { resize: vertical; }
     .wizard .buttons {
       display: flex;
       justify-content: space-between;
@@ -110,7 +118,7 @@
       opacity: 0.5;
       cursor: default;
     }
-    /* чекбоксы на шаге 4 */
+    /* чекбоксы шаг 4 */
     .wizard .step[data-step="4"] #extras-container {
       display: flex;
       flex-direction: column;
@@ -125,7 +133,6 @@
   </style>
 </head>
 <body>
-
   <div class="wrapper">
     <div class="wizard">
       <header>
@@ -135,8 +142,8 @@
       <!-- Шаг 1 -->
       <div class="step active" data-step="1">
         <h2>1. Выберите формат</h2>
-        <label><input type="radio" name="mode" value="studio"> В студии</label>
-        <label><input type="radio" name="mode" value="outdoor"> Выезд</label>
+        <label><input type="radio" name="mode" value="studio">В студии</label>
+        <label><input type="radio" name="mode" value="outdoor">Выезд</label>
         <div class="buttons">
           <button class="btn-prev" disabled>← Назад</button>
           <button class="btn-next" disabled>Далее →</button>
@@ -166,7 +173,7 @@
         <label>Количество человек:
           <input type="number" id="count" min="1" value="1">
         </label>
-        <label id="address-container" style="display:none">
+        <label id="address-container" style="display:none;">
           Адрес (для выезда):
           <input type="text" id="address">
         </label>
@@ -201,10 +208,22 @@
       <div class="step" data-step="4">
         <h2>4. Дополнительные услуги</h2>
         <div id="extras-container">
-          <label><input type="checkbox" name="extras" value="restroom"> Комната отдыха</label>
-          <label><input type="checkbox" name="extras" value="photographer"> Фотограф</label>
-          <label><input type="checkbox" name="extras" value="videographer"> Видеограф</label>
-          <label><input type="checkbox" name="extras" value="disco"> Дискотека</label>
+          <label class="extra-restroom">
+            <input type="checkbox" name="extras" value="restroom">
+            Комната отдыха
+          </label>
+          <label class="extra-photographer">
+            <input type="checkbox" name="extras" value="photographer">
+            Фотограф
+          </label>
+          <label class="extra-videographer">
+            <input type="checkbox" name="extras" value="videographer">
+            Видеограф
+          </label>
+          <label class="extra-disco">
+            <input type="checkbox" name="extras" value="disco">
+            Дискотека
+          </label>
         </div>
         <label style="display:block; margin-top:12px; color:var(--white);">
           Ваши пожелания (необязательно):
@@ -212,8 +231,8 @@
             style="width:100%; padding:8px; margin-top:4px;
                    background:#222; border:1px solid #444;
                    color:#fff; border-radius:4px;"
-            placeholder="Например: хотелось бы торт или музыкальную открытку…">
-          </textarea>
+            placeholder="Например: хотелось бы торт или музыкальную открытку…"
+          ></textarea>
         </label>
         <div class="buttons" style="margin-top:16px;">
           <button class="btn-prev">← Назад</button>
@@ -223,51 +242,49 @@
     </div>
   </div>
 
-  <!-- iOS “Готово” -->
+  <!-- кнопка “Готово” для iOS -->
   <button type="button"
-          style="position:fixed; bottom:env(safe-area-inset-bottom,10px);
-                 right:10px; padding:8px 12px; background:#444;
-                 color:#fff; border:none; border-radius:6px; z-index:1000;"
-          onclick="document.activeElement.blur()">
-    Готово
-  </button>
+    style="position:fixed; bottom:env(safe-area-inset-bottom,10px);
+           right:10px; padding:8px 12px; background:#444;
+           color:#fff; border:none; border-radius:6px; z-index:1000;"
+    onclick="document.activeElement.blur()"
+  >Готово</button>
 
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
-    // Telegram WebApp
-    window.Telegram?.WebApp?.ready();
+    // Telegram WebApp ready
+    if (window.Telegram?.WebApp) Telegram.WebApp.ready();
 
-    // подгоняем высоту под клавиатуру
+    // подгоняем высоту
     function adjustHeight() {
-      document.body.style.height =
-        (window.visualViewport?.height || window.innerHeight) + 'px';
+      document.body.style.height = (window.visualViewport?.height || window.innerHeight) + 'px';
     }
     window.visualViewport?.addEventListener('resize', adjustHeight);
     adjustHeight();
 
-    // ставим класс при открытой клаве
+    // отслеживаем клаву
     window.visualViewport?.addEventListener('resize', () => {
       const open = window.visualViewport.height < window.innerHeight;
       document.body.classList.toggle('keyboard-open', open);
     });
 
-    // плавный скролл и expand при фокусе
-    document.querySelectorAll('input, textarea, select').forEach(el => {
-      el.addEventListener('focus', () => {
-        document.body.classList.add('keyboard-open');
-        window.Telegram?.WebApp?.expand();
+    // автоскролл и expand при фокусе
+    document.querySelectorAll('input, textarea, select')
+      .forEach(el => {
+        el.addEventListener('focus', () => {
+          if (window.Telegram?.WebApp) Telegram.WebApp.expand();
+          setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+        });
+        el.addEventListener('blur', () => {
+          document.body.classList.remove('keyboard-open');
+        });
       });
-      el.addEventListener('blur', () => {
-        document.body.classList.remove('keyboard-open');
-      });
-    });
 
-    // логика шагов
-    const steps = Array.from(document.querySelectorAll('.step'));
+    // логика шагового интерфейса (не трогал, как было у вас)
+    const steps = [...document.querySelectorAll('.step')];
     let current = 0;
-
-    const datePicker = document.getElementById('date-picker');
     const timeSelect = document.getElementById('time-select');
+    const datePicker = document.getElementById('date-picker');
     const countEl    = document.getElementById('count');
     const addrCont   = document.getElementById('address-container');
     const addrInput  = document.getElementById('address');
@@ -276,105 +293,73 @@
     const visitsEl   = document.getElementById('visits');
     const occasionEl = document.getElementById('occasion');
 
-    // заполняем время
-    for (let h = 9; h <= 22; h++) {
-      ['00','30'].forEach(m => {
-        if (h === 22 && m === '30') return;
+    // заполняем селект времени
+    for (let h=9; h<=22; h++){
+      ['00','30'].forEach(m=>{
+        if(h===22 && m==='30') return;
         const opt = document.createElement('option');
         opt.value = `${h.toString().padStart(2,'0')}:${m}`;
         opt.textContent = opt.value;
         timeSelect.append(opt);
       });
     }
+    flatpickr(datePicker, { dateFormat:'d.m.Y', minDate:'today', onChange:()=>validateStep(1) });
 
-    // flatpickr
-    flatpickr("#date-picker", {
-      dateFormat: "d.m.Y",
-      minDate: "today",
-      onChange: () => validateStep(1)
-    });
-
-    function showStep(i) {
-      steps.forEach((s, idx) => s.classList.toggle('active', idx === i));
+    function showStep(i){
+      steps.forEach((s,idx)=>s.classList.toggle('active', idx===i));
       current = i; validateStep(i);
       const mode = document.querySelector('input[name="mode"]:checked')?.value;
-      addrCont.style.display = mode === 'outdoor' ? 'block' : 'none';
-      if (i === 3) {
-        document.querySelector('.extra-restroom')
-                .style.display = mode === 'studio' ? 'flex' : 'none';
+      addrCont.style.display = mode==='outdoor' ? 'block' : 'none';
+      if(i===3) {
+        document.querySelector('.extra-restroom').style.display = mode==='studio' ? 'flex' : 'none';
       }
     }
-
-    function validateStep(i) {
-      const btn = steps[i].querySelector('.btn-next');
+    function validateStep(i){
+      const btn = steps[i].querySelector('.btn-next'), v = i;
       let ok = false;
-      if (i === 0) {
-        ok = !!document.querySelector('input[name="mode"]:checked');
-      } else if (i === 1) {
-        ok = !!datePicker.value && !!timeSelect.value;
-      } else if (i === 2) {
-        ok = Number(countEl.value) > 0 &&
-             !!programEl.value &&
-             Number(ageEl.value) > 0 &&
-             Number(visitsEl.value) >= 0 &&
-             occasionEl.value.trim() !== '' &&
-             (addrCont.style.display === 'none' ||
-              addrInput.value.trim() !== '');
-      } else {
-        ok = true;
-      }
+      if(v===0) ok = !!document.querySelector('input[name="mode"]:checked');
+      else if(v===1) ok = !!datePicker.value && !!timeSelect.value;
+      else if(v===2) {
+        ok = Number(countEl.value)>0 && !!programEl.value
+          && Number(ageEl.value)>0 && Number(visitsEl.value)>=0
+          && occasionEl.value.trim()!=='' 
+          && (addrCont.style.display==='none' || addrInput.value.trim()!=='');
+      } else ok = true;
       btn.disabled = !ok;
     }
-
-    document.querySelectorAll('.btn-next').forEach(b =>
-      b.addEventListener('click', () =>
-        current < steps.length - 1 
-          ? showStep(current + 1) 
-          : finish()
-      )
-    );
-    document.querySelectorAll('.btn-prev').forEach(b =>
-      b.addEventListener('click', () =>
-        current > 0 && showStep(current - 1)
-      )
-    );
-    steps.forEach((st, i) => {
-      st.addEventListener('input',  () => validateStep(i));
-      st.addEventListener('change', () => validateStep(i));
+    document.querySelectorAll('.btn-next').forEach(b=>b.onclick=()=>{
+      if(current<steps.length-1) showStep(current+1);
+      else finish();
     });
-    document.querySelectorAll('input[name="mode"]')
-            .forEach(r => r.addEventListener('change', () => validateStep(0)));
+    document.querySelectorAll('.btn-prev').forEach(b=>b.onclick=()=>{
+      if(current>0) showStep(current-1);
+    });
+    steps.forEach((s,i)=>{
+      s.oninput = ()=>validateStep(i);
+      s.onchange = ()=>validateStep(i);
+    });
+    document.querySelectorAll('input[name="mode"]').forEach(r=>r.onchange=()=>validateStep(0));
     validateStep(0);
 
-    function finish() {
-      const extras = Array.from(
-        document.querySelectorAll('input[name="extras"]:checked')
-      ).map(ch => ch.value);
+    function finish(){
+      const extras = [...document.querySelectorAll('input[name="extras"]:checked')].map(ch=>ch.value);
       const data = {
-        mode:     document.querySelector('input[name="mode"]:checked').value,
-        date:     datePicker.value,
-        time:     timeSelect.value,
-        count:    countEl.value,
-        address:  addrInput.value || '',
-        program:  programEl.value,
-        age:      ageEl.value,
-        visits:   visitsEl.value,
+        mode: document.querySelector('input[name="mode"]:checked').value,
+        date: datePicker.value,
+        time: timeSelect.value,
+        count: countEl.value,
+        address: addrInput.value||'',
+        program: programEl.value,
+        age: ageEl.value,
+        visits: visitsEl.value,
         occasion: occasionEl.value,
-        extras,
-        wishes:   document.getElementById('wishes').value.trim()
+        extras, wishes: document.getElementById('wishes').value.trim()
       };
-      if (window.Telegram?.WebApp?.sendData) {
-        Telegram.WebApp.sendData(JSON.stringify({ action:'booking', payload:data }));
-      } else {
-        console.log('Mock send:', data);
-      }
+      if(window.Telegram?.WebApp?.sendData){
+        Telegram.WebApp.sendData(JSON.stringify({action:'booking',payload:data}));
+      } else console.log('Mock send:', data);
       steps[current].innerHTML = `
-        <p style="
-          color:white;
-          text-align:center;
-          padding:40px 20px;
-          line-height:1.5;
-        ">
+        <p style="color:white;text-align:center;padding:40px 20px;line-height:1.5;">
           Спасибо!<br>С вами свяжется администратор.
         </p>`;
     }
