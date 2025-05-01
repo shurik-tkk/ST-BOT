@@ -155,277 +155,136 @@
       </div>
     </div>
 
-<!-- Шаг 3: подробности -->
-<div class="step" data-step="3">
-  <h2>3. Подробности</h2>
+    <!-- Шаг 3: подробности -->
+    <div class="step" data-step="3">
+      <h2>3. Подробности</h2>
 
-  <label>Количество человек:
-    <input
-  type="text"
-  id="count"
-  inputmode="numeric"
-  pattern="\d*"
-  enterkeyhint="done"
-  placeholder="1"
->
-  </label>
+      <label>Количество человек:
+        <input
+          type="text"
+          id="count"
+          inputmode="numeric"
+          pattern="\d*"
+          enterkeyhint="done"
+          placeholder="1"
+        >
+      </label>
 
-  <label id="address-container" style="display:none;">
-    Адрес (для выезда):
-    <input type="text" id="address">
-  </label>
+      <label id="address-container" style="display:none;">
+        Адрес (для выезда):
+        <input type="text" id="address">
+      </label>
 
-  <label>Программа:
-    <select id="program">
-      <option value="">– выберите –</option>
-      <option value="classic">Классика</option>
-      <option value="musicality">Музыкалити</option>
-      <option value="battle">Battle Show</option>
-      <option value="lotto">Музыкальное лото</option>
-      <option value="kids">Детский формат</option>
-      <option value="quiz">Квиз-мафия</option>
-      <option value="21plus">21+</option>
-    </select>
-  </label>
+      <label>Программа:
+        <select id="program">
+          <option value="">– выберите –</option>
+          <option value="classic">Классика</option>
+          <option value="musicality">Музыкалити</option>
+          <option value="battle">Battle Show</option>
+          <option value="lotto">Музыкальное лото</option>
+          <option value="kids">Детский формат</option>
+          <option value="quiz">Квиз-мафия</option>
+          <option value="21plus">21+</option>
+        </select>
+      </label>
 
-  <label>Средний возраст:
-    <select id="age">
-      <option value="">– выберите –</option>
-      <option value="7-12">7-12</option>
-      <option value="13-17">13-17</option>
-      <option value="18-30">18-30</option>
-      <option value="31-45">31-45</option>
-      <option value="45+">45+</option>
-    </select>
-  </label>
+      <label>Средний возраст:
+        <select id="age">
+          <option value="">– выберите –</option>
+          <option value="7-12">7-12</option>
+          <option value="13-17">13-17</option>
+          <option value="18-30">18-30</option>
+          <option value="31-45">31-45</option>
+          <option value="45+">45+</option>
+        </select>
+      </label>
 
-  <label>Сколько раз были у нас:
-    <select id="visits">
-      <option value="">– выберите –</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5+">5+</option>
-    </select>
-  </label>
+      <label>Сколько раз были u нас:
+        <select id="visits">
+          <option value="">– выберите –</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5+">5+</option>
+        </select>
+      </label>
 
-  <label>Повод праздника:
-    <select id="occasion">
-      <option value="">– выберите –</option>
-      <option value="день рождения">день рождения</option>
-      <option value="корпоратив">корпоратив</option>
-      <option value="мальчишник">мальчишник</option>
-      <option value="девичник">девичник</option>
-      <option value="встреча с друзьями">встреча с друзьями</option>
-      <option value="выпускной">выпускной</option>
-      <option value="поездка на природу">поездка на природу</option>
-      <option value="свадьба">свадьба</option>
-      <option value="иное">иное</option>
-    </select>
-  </label>
+      <label>Повод праздника:
+        <select id="occasion">
+          <option value="">– выберите –</option>
+          <option value="день рождения">день рождения</option>
+          <option value="корпоратив">корпоратив</option>
+          <option value="мальчишник">мальчишник</option>
+          <option value="девичник">девичник</option>
+          <option value="встреча с друзьями">встреча с друзьями</option>
+          <option value="выпускной">выпускной</option>
+          <option value="поездка на природу">поездка на природу</option>
+          <option value="свадьба">свадьба</option>
+          <option value="иное">иное</option>
+        </select>
+      </label>
 
-  <div class="buttons">
-    <button class="btn-prev">← Назад</button>
-    <button class="btn-next" disabled>Далее →</button>
+      <div class="buttons">
+        <button class="btn-prev">← Назад</button>
+        <button class="btn-next" disabled>Далее →</button>
+      </div>
+    </div>
+
+    <!-- Шаг 4: дополнительные услуги + пожелания -->
+    <div class="step" data-step="4">
+      <h2>4. Дополнительные услуги</h2>
+      <div id="extras-container">
+        <label class="extra-restroom">
+          <input type="checkbox" name="extras" value="restroom">
+          Комната отдыха
+        </label>
+        <label class="extra-photographer">
+          <input type="checkbox" name="extras" value="photographer">
+          Фотограф
+        </label>
+        <label class="extra-videographer">
+          <input type="checkbox" name="extras" value="videographer">
+          Видеограф
+        </label>
+        <label class="extra-disco">
+          <input type="checkbox" name="extras" value="disco">
+          Дискотека
+        </label>
+      </div>
+
+      <!-- Поле для пожеланий -->
+      <label style="display:block; margin-top:12px; color:var(--white);">
+        Ваши пожелания (необязательно):
+        <textarea
+          id="wishes"
+          rows="3"
+          style="width:100%; padding:8px; margin-top:4px; background:#222; border:1px solid #444; color:#fff; border-radius:4px;"
+          placeholder="Например: хотелось бы девочку ведущую…"
+        ></textarea>
+      </label>
+
+      <div class="buttons" style="margin-top:16px;">
+        <button class="btn-prev">← Назад</button>
+        <button class="btn-next" id="finish-btn">Записаться</button>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- Шаг 4: дополнительные услуги + пожелания -->
-<div class="step" data-step="4">
-  <h2>4. Дополнительные услуги</h2>
-  <div id="extras-container">
-    <label class="extra-restroom">
-      <input type="checkbox" name="extras" value="restroom">
-      Комната отдыха
-    </label>
-    <label class="extra-photographer">
-      <input type="checkbox" name="extras" value="photographer">
-      Фотограф
-    </label>
-    <label class="extra-videographer">
-      <input type="checkbox" name="extras" value="videographer">
-      Видеограф
-    </label>
-    <label class="extra-disco">
-      <input type="checkbox" name="extras" value="disco">
-      Дискотека
-    </label>
-  </div>
-
-  <!-- Поле для пожеланий -->
-  <label style="display:block; margin-top:12px; color:var(--white);">
-    Ваши пожелания (необязательно):
-    <textarea
-      id="wishes"
-      rows="3"
-      style="width:100%; padding:8px; margin-top:4px; background:#222; border:1px solid #444; color:#fff; border-radius:4px;"
-      placeholder="Например: хотелось бы девочку ведущую…"
-    ></textarea>
-  </label>
-
-  <div class="buttons" style="margin-top:16px;">
-    <button class="btn-prev">← Назад</button>
-    <button class="btn-next" id="finish-btn">Записаться</button>
-  </div>
-</div>
-
-  высоту под клавиатуру
+  <!-- Подключаем Flatpickr и WebApp скрипты -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    // Подгоняем высоту под клавиатуру
     function adjustHeight() {
       document.body.style.height = (window.visualViewport?.height || window.innerHeight) + 'px';
     }
     window.visualViewport?.addEventListener('resize', adjustHeight);
     adjustHeight();
 
+    // Элементы формы и шаги
     const steps  = Array.from(document.querySelectorAll('.step'));
     let current  = 0;
-
     const timeSelect       = document.getElementById('time-select');
     const datePicker       = document.getElementById('date-picker');
     const count            = document.getElementById('count');
     const addressContainer = document.getElementById('address-container');
-    const address          = document.getElementById('address');
-    const program          = document.getElementById('program');
-    const age              = document.getElementById('age');
-    const visits           = document.getElementById('visits');
-    const occasion         = document.getElementById('occasion');
-
-    // Генерация времени
-    for (let h = 9; h <= 22; h++) {
-      ['00','30'].forEach(m => {
-        if (h === 22 && m === '30') return;
-        const opt = document.createElement('option');
-        opt.value = `${h.toString().padStart(2,'0')}:${m}`;
-        opt.textContent = opt.value;
-        timeSelect.append(opt);
-      });
-    }
-
-    // Календарь
-    flatpickr("#date-picker", {
-      dateFormat: "d.m.Y",
-      minDate: "today",
-      onChange: () => validateStep(1)
-    });
-
-    function showStep(idx) {
-      steps.forEach((st,i) => st.classList.toggle('active', i === idx));
-      current = idx;
-      validateStep(idx);
-
-      const mode = document.querySelector('input[name="mode"]:checked')?.value;
-      addressContainer.style.display = (mode === 'outdoor') ? 'block' : 'none';
-
-      if (idx === 3) {
-        document.querySelector('.extra-restroom').style.display =
-          (mode === 'studio' ? 'flex' : 'none');
-      }
-    }
-
-function validateStep(idx) {
-  const btn = steps[idx].querySelector('.btn-next');
-  let ok = false;
-
-  if (idx === 0) {
-    ok = !!document.querySelector('input[name="mode"]:checked');
-  } else if (idx === 1) {
-    ok = !!datePicker.value && !!timeSelect.value;
-  } else if (idx === 2) {
-    ok = (
-      Number(count.value) > 0 &&
-      !!program.value &&
-      !!age.value &&
-      !!visits.value &&
-      !!occasion.value &&
-      (
-        addressContainer.style.display === 'none'
-        || address.value.trim() !== ''
-      )
-    );
-  } else if (idx === 3) {
-    ok = true;
-  }
-
-  btn.disabled = !ok;
-}
-
-    // Навигация
-    document.querySelectorAll('.btn-next').forEach(b => {
-      b.addEventListener('click', () => {
-        if (current < steps.length - 1) showStep(current + 1);
-        else finish();
-      });
-    });
-    document.querySelectorAll('.btn-prev').forEach(b => {
-      b.addEventListener('click', () => {
-        if (current > 0) showStep(current - 1);
-      });
-    });
-
-    // Валидация
-    steps.forEach((st,i) => {
-      st.addEventListener('input', () => validateStep(i));
-      st.addEventListener('change', () => validateStep(i));
-    });
-    document.querySelectorAll('input[name="mode"]').forEach(r => {
-      r.addEventListener('change', () => validateStep(0));
-    });
-    validateStep(0);
-
-    // Авто-expand и scroll при фокусе
-    document
-      .querySelectorAll('input:not([type="radio"]):not([type="checkbox"]), textarea')
-      .forEach(el => {
-        el.addEventListener('focus', () => {
-          if (window.Telegram && Telegram.WebApp) Telegram.WebApp.expand();
-          setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
-        });
-      });
-
-    // Отправка
-function finish() {
-  const extras = Array.from(
-    document.querySelectorAll('input[name="extras"]:checked')
-  ).map(ch => ch.value);
-
-  const data = {
-    mode:     document.querySelector('input[name="mode"]:checked').value,
-    date:     datePicker.value,
-    time:     timeSelect.value,
-    count:    count.value,
-    address:  address.value || '',
-    program:  program.value,
-    age:      age.value,
-    visits:   visits.value,
-    occasion: occasion.value,
-    extras:   extras,
-    wishes:   document.getElementById('wishes').value.trim()  // <-- добавили
-  };
-
-    alert(
-    "DEBUG: finish() вызвана!\n\n" +
-    "Вот данные для отправки:\n" +
-    JSON.stringify(data, null, 2)
-  );
-
-if (window.Telegram && Telegram.WebApp && Telegram.WebApp.sendData) {
-  console.log("→ payload to bot:", data);
-    Telegram.WebApp.sendData(JSON.stringify({ action: 'booking', payload: data }));
-  } else {
-    console.log('Mock sendData:', data);
-  }
-
-  steps[current].innerHTML = `
-    <p style="
-      color:white;
-      text-align:center;
-      padding:40px 20px;
-      line-height:1.5;
-    ">
-      Спасибо!<br>С вами свяжется администратор для уточнения деталей.
-    </p>
-  `;
-}
-  </script>
-</body>
-</html>
