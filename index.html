@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Show Today — Бронирование</title>
+  <!-- Flatpickr CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
   <style>
     :root {
       --yellow: #ff0;
@@ -19,6 +19,7 @@
       background: var(--yellow);
       font-family: "Segoe UI", sans-serif;
     }
+    /* wrapper для вертикального скролла + центрирование по горизонтали */
     .wrapper {
       height: 100%;
       overflow-y: auto;
@@ -26,7 +27,7 @@
       justify-content: center;
       padding: 20px 0;
     }
-    /* Если нужно — активировать только на мобильниках */
+    /* когда клавиатура поднята — прижать форму к верху */
     body.keyboard-open .wrapper {
       justify-content: flex-start;
       padding-top: env(safe-area-inset-top,20px);
@@ -45,37 +46,80 @@
       text-align: center;
       padding: 16px;
     }
-    .wizard header img { max-width:200px; height:auto }
-    .wizard .step { padding:16px; display:none; color:var(--white) }
-    .wizard .step.active { display:block }
-    .wizard .step h2 { margin-bottom:12px; font-size:1.1rem }
-    .wizard label { display:flex; align-items:center; margin-bottom:8px; cursor:pointer }
-    .wizard input[type="radio"], .wizard input[type="checkbox"] {
+    .wizard header img {
+      max-width: 200px;
+      height: auto;
+    }
+    .wizard .step {
+      padding: 16px;
+      display: none;
+      color: var(--white);
+    }
+    .wizard .step.active { display: block; }
+    .wizard .step h2 {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+    .wizard label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .wizard input[type="radio"],
+    .wizard input[type="checkbox"] {
       accent-color: var(--yellow);
-      margin-right:8px; width:18px; height:18px;
+      margin-right: 8px;
+      width: 18px;
+      height: 18px;
     }
-    .wizard input, .wizard select, .wizard textarea {
-      width:100%; padding:8px; margin:4px 0 12px;
-      border:1px solid #444; border-radius:4px;
-      background:#222; color:var(--white);
+    .wizard input,
+    .wizard select,
+    .wizard textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 4px 0 12px;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background: #222;
+      color: var(--white);
     }
-    .wizard textarea { resize:vertical }
+    .wizard textarea { resize: vertical; }
     .wizard .buttons {
-      display:flex; justify-content:space-between; gap:8px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
     }
     .wizard button {
-      flex:1; padding:10px; font-size:1rem;
-      border:none; border-radius:6px; cursor:pointer;
+      flex: 1;
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    .wizard .btn-next { background:var(--blue); color:var(--white) }
-    .wizard .btn-prev { background:#444; color:var(--white) }
-    .wizard button:disabled { opacity:.5; cursor:default }
+    .wizard .btn-next {
+      background: var(--blue);
+      color: var(--white);
+    }
+    .wizard .btn-prev {
+      background: #444;
+      color: var(--white);
+    }
+    .wizard button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+    /* Чекбоксы + пожелания на шаге 4 */
     .wizard .step[data-step="4"] #extras-container {
-      display:flex; flex-direction:column; gap:8px;
-      align-items:flex-start; max-width:90%; margin:0 auto 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 90%;
+      margin: 0 auto 12px;
     }
     .wizard .step[data-step="4"] #extras-container label {
-      color:var(--white);
+      color: var(--white);
     }
   </style>
 </head>
@@ -87,7 +131,7 @@
         <img src="logo.png" alt="Show Today">
       </header>
 
-      <!-- Шаг 1 -->
+      <!-- Шаг 1: формат -->
       <div class="step active" data-step="1">
         <h2>1. Выберите формат</h2>
         <label><input type="radio" name="mode" value="studio"> В студии</label>
@@ -97,7 +141,8 @@
           <button class="btn-next" disabled>Далее →</button>
         </div>
       </div>
-      <!-- Шаг 2 -->
+
+      <!-- Шаг 2: дата и время -->
       <div class="step" data-step="2">
         <h2>2. Дата и время</h2>
         <label>Дата:
@@ -113,7 +158,8 @@
           <button class="btn-next" disabled>Далее →</button>
         </div>
       </div>
-      <!-- Шаг 3 -->
+
+      <!-- Шаг 3: подробности -->
       <div class="step" data-step="3">
         <h2>3. Подробности</h2>
         <label>Количество человек:
@@ -149,7 +195,8 @@
           <button class="btn-next" disabled>Далее →</button>
         </div>
       </div>
-      <!-- Шаг 4 -->
+
+      <!-- Шаг 4: доп. услуги + пожелания -->
       <div class="step" data-step="4">
         <h2>4. Дополнительные услуги</h2>
         <div id="extras-container">
@@ -158,116 +205,143 @@
           <label><input type="checkbox" name="extras" value="videographer"> Видеограф</label>
           <label><input type="checkbox" name="extras" value="disco"> Дискотека</label>
         </div>
-        <label style="display:block; margin-top:12px; color:var(--white);">
+        <label style="display:block; color:var(--white); margin-bottom:12px;">
           Ваши пожелания (необязательно):
           <textarea id="wishes" rows="3"
-            style="width:100%; padding:8px; margin-top:4px;
-                   background:#222; border:1px solid #444;
-                   color:#fff; border-radius:4px;"
-            placeholder="Например: пусть ведущий поздравит именинника после шоу или сделайте больше подвижных конкурсов…"></textarea>
+                    style="width:100%; padding:8px; margin-top:4px;
+                           background:#222; border:1px solid #444;
+                           color:#fff; border-radius:4px;"
+                    placeholder="Например: хотелось бы торт…"></textarea>
         </label>
-        <div class="buttons" style="margin-top:16px;">
+        <div class="buttons">
           <button class="btn-prev">← Назад</button>
           <button class="btn-next" id="finish-btn">Записаться</button>
         </div>
       </div>
+
     </div>
   </div>
 
-  <!-- Кнопка “Готово” для скрытия клавиатуры на iOS -->
+  <!-- iOS “Готово” -->
   <button type="button"
-    style="
-      position: fixed;
-      bottom: env(safe-area-inset-bottom,10px);
-      right: 10px;
-      padding: 8px 12px;
-      background: #444;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      z-index: 1000;
-    "
-    onclick="document.activeElement.blur()"
+          style="position:fixed;bottom:env(safe-area-inset-bottom,10px);right:10px;
+                 padding:8px 12px;background:#444;color:#fff;border:none;
+                 border-radius:6px;z-index:1000;"
+          onclick="document.activeElement.blur()"
   >Готово</button>
 
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
-    if (window.Telegram && Telegram.WebApp) Telegram.WebApp.ready();
-    function adjustHeight() {
-      document.body.style.height = (window.visualViewport?.height || window.innerHeight) + 'px';
+    // Telegram WebApp
+    if (window.Telegram?.WebApp) Telegram.WebApp.ready();
+
+    // Подгонка высоты + детект клавиатуры
+    function adjustHeight(){
+      document.body.style.height =
+        (window.visualViewport?.height || window.innerHeight) + 'px';
     }
     window.visualViewport?.addEventListener('resize', adjustHeight);
     adjustHeight();
-
-    // отслеживаем открытие клавы
-    window.visualViewport?.addEventListener('resize', () => {
-      const isOpen = window.visualViewport.height < window.innerHeight;
-      document.body.classList.toggle('keyboard-open', isOpen);
+    window.visualViewport?.addEventListener('resize', ()=>{
+      document.body.classList.toggle(
+        'keyboard-open',
+        window.visualViewport.height < window.innerHeight
+      );
     });
-    // шаги
-    const steps = [...document.querySelectorAll('.step')];
-    let current = 0;
-    const timeSelect = document.getElementById('time-select');
-    const datePicker = document.getElementById('date-picker');
-    const countEl    = document.getElementById('count');
-    const addrCont   = document.getElementById('address-container');
-    const addrInput  = document.getElementById('address');
-    const programEl  = document.getElementById('program');
-    const ageEl      = document.getElementById('age');
-    const visitsEl   = document.getElementById('visits');
-    const occasionEl = document.getElementById('occasion');
 
-    // время
-    for (let h=9; h<=22; h++){
+    // Авто-expand + scroll при фокусе
+    document.querySelectorAll('input, textarea, select').forEach(el=>{
+      el.addEventListener('focus', ()=>{
+        document.body.classList.add('keyboard-open');
+        if(window.Telegram?.WebApp) Telegram.WebApp.expand();
+      });
+      el.addEventListener('blur', ()=>{
+        document.body.classList.remove('keyboard-open');
+      });
+    });
+
+    // Логика шагового интерфейса
+    const steps = Array.from(document.querySelectorAll('.step'));
+    let current = 0;
+
+    const timeSelect       = document.getElementById('time-select');
+    const datePicker       = document.getElementById('date-picker');
+    const countEl          = document.getElementById('count');
+    const addrCont         = document.getElementById('address-container');
+    const addrInput        = document.getElementById('address');
+    const programEl        = document.getElementById('program');
+    const ageEl            = document.getElementById('age');
+    const visitsEl         = document.getElementById('visits');
+    const occasionEl       = document.getElementById('occasion');
+
+    // Заполняем времена
+    for(let h=9; h<=22; h++){
       ['00','30'].forEach(m=>{
-        if(h===22&&m==='30') return;
-        const opt = document.createElement('option');
+        if(h===22 && m==='30') return;
+        let opt = document.createElement('option');
         opt.value = `${h.toString().padStart(2,'0')}:${m}`;
         opt.textContent = opt.value;
         timeSelect.append(opt);
       });
     }
-    flatpickr("#date-picker",{ dateFormat:"d.m.Y", minDate:"today", onChange:()=>validateStep(1) });
+
+    // Flatpickr
+    flatpickr("#date-picker", {
+      dateFormat: "d.m.Y",
+      minDate: "today",
+      onChange: ()=> validateStep(1)
+    });
 
     function showStep(i){
       steps.forEach((s,idx)=>s.classList.toggle('active', idx===i));
       current = i; validateStep(i);
       const mode = document.querySelector('input[name="mode"]:checked')?.value;
-      addrCont.style.display = mode==='outdoor'?'block':'none';
+      addrCont.style.display = (mode==='outdoor')?'block':'none';
       if(i===3){
-        document.querySelector('.extra-restroom').style.display = mode==='studio'?'flex':'none';
+        document.querySelector('.extra-restroom').style.display =
+          (mode==='studio')?'flex':'none';
       }
     }
+
     function validateStep(i){
-      const btn = steps[i].querySelector('.btn-next');
-      let ok=false;
-      if(i===0) ok=!!document.querySelector('input[name="mode"]:checked');
-      else if(i===1) ok=!!datePicker.value&&!!timeSelect.value;
-      else if(i===2){
-        ok = Number(countEl.value)>0 && !!programEl.value
-          && Number(ageEl.value)>0 && Number(visitsEl.value)>=0
-          && occasionEl.value.trim()!=='' 
-          && (addrCont.style.display==='none' || addrInput.value.trim()!=='');
-      } else ok=true;
-      btn.disabled = !ok;
+      let ok = false;
+      if(i===0){
+        ok = !!document.querySelector('input[name="mode"]:checked');
+      } else if(i===1){
+        ok = !!datePicker.value && !!timeSelect.value;
+      } else if(i===2){
+        ok = countEl.value>0 && !!programEl.value &&
+             ageEl.value>0 && visitsEl.value>=0 &&
+             occasionEl.value.trim()!=='' &&
+             (addrCont.style.display==='none'|| addrInput.value.trim()!=='');
+      } else ok = true;
+      steps[i].querySelector('.btn-next').disabled = !ok;
     }
+
     document.querySelectorAll('.btn-next').forEach(b=>
-      b.addEventListener('click',()=> current<steps.length-1? showStep(current+1) : finish())
+      b.addEventListener('click', ()=>{
+        if(current < steps.length-1) showStep(current+1);
+        else finish();
+      })
     );
     document.querySelectorAll('.btn-prev').forEach(b=>
-      b.addEventListener('click',()=> current>0 && showStep(current-1))
+      b.addEventListener('click', ()=>{
+        if(current>0) showStep(current-1);
+      })
     );
     steps.forEach((st,i)=>{
-      st.addEventListener('input',()=>validateStep(i));
-      st.addEventListener('change',()=>validateStep(i));
+      st.addEventListener('input', ()=>validateStep(i));
+      st.addEventListener('change', ()=>validateStep(i));
     });
     document.querySelectorAll('input[name="mode"]').forEach(r=>
-      r.addEventListener('change',()=>validateStep(0))
+      r.addEventListener('change', ()=>validateStep(0))
     );
     validateStep(0);
 
     function finish(){
-      const extras = [...document.querySelectorAll('input[name="extras"]:checked')].map(ch=>ch.value);
+      const extras = Array.from(
+        document.querySelectorAll('input[name="extras"]:checked')
+      ).map(ch=>ch.value);
       const data = {
         mode: document.querySelector('input[name="mode"]:checked').value,
         date: datePicker.value,
@@ -278,16 +352,23 @@
         age: ageEl.value,
         visits: visitsEl.value,
         occasion: occasionEl.value,
-        extras, wishes: document.getElementById('wishes').value.trim()
+        extras,
+        wishes: document.getElementById('wishes').value.trim()
       };
       if(window.Telegram?.WebApp?.sendData){
         Telegram.WebApp.sendData(JSON.stringify({action:'booking',payload:data}));
       } else console.log('Mock send:',data);
+
       steps[current].innerHTML = `
-        <p style="color:white; text-align:center;
-                  padding:40px 20px; line-height:1.5;">
-          Спасибо!<br>С вами свяжется администратор.
-        </p>`;
+        <p style="
+          color:white;
+          text-align:center;
+          padding:40px 20px;
+          line-height:1.5;
+        ">
+          Спасибо!<br>С вами свяжется администратор для уточнения деталей.
+        </p>
+      `;
     }
   </script>
 </body>
