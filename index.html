@@ -141,38 +141,41 @@
     occasionSel.addEventListener('change', ()=> validateStep(2));
     validateStep(0);
 
-    // MainButton в WebApp
-    if (tg) {
-      tg.MainButton.setText('Записаться');
-      tg.MainButton.show();
-      tg.MainButton.onClick(finish);
+// Отправка данных и закрытие
+function finish() {
+  const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(i=>i.value);
+  const payload = {
+    action: 'booking',
+    payload: {
+      mode: document.querySelector('input[name="mode"]:checked').value,
+      date: datePicker.value,
+      time: timeSelect.value,
+      count: countInput.value,
+      address: addressInput.value || '',
+      program: programSel.value,
+      age:     ageSel.value,
+      visits:  visitsSel.value,
+      occasion: occasionSel.value,
+      extras:  extras,
+      wishes:  document.getElementById('wishes').value.trim()
     }
+  };
 
-    // Отправка данных и закрытие
-    function finish() {
-      const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(i=>i.value);
-      const payload = {
-        action: 'booking',
-        payload: {
-          mode: document.querySelector('input[name="mode"]:checked').value,
-          date: datePicker.value,
-          time: timeSelect.value,
-          count: countInput.value,
-          address: addressInput.value || '',
-          program: programSel.value,
-          age:     ageSel.value,
-          visits:  visitsSel.value,
-          occasion: occasionSel.value,
-          extras:  extras,
-          wishes:  document.getElementById('wishes').value.trim()
-        }
-      };
-      // всегда проверка
-      if (tg) {
-        tg.sendData(JSON.stringify(payload));
-        setTimeout(() => tg.close(), 100);
-      } else console.log('Mock sendData', payload);
-    }
+  if (tg) {
+    tg.sendData(JSON.stringify(payload));
+    setTimeout(() => tg.close(), 100);
+  } else {
+    console.log('Mock sendData', payload);
+  }
+}
+
+// Привязка MainButton после объявления finish()
+if (tg && tg.MainButton) {
+  tg.MainButton.setText("Записаться");
+  tg.MainButton.show();
+  tg.MainButton.onClick(finish);
+}
+
   </script>
 </body>
 </html>
