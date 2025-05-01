@@ -28,7 +28,6 @@
 <body>
   <div class="wizard">
     <header><img src="logo.png" alt="Show Today"></header>
-    <!-- Шаг 1 -->
     <div class="step active" data-step="1">
       <h2>1. Выберите формат</h2>
       <label><input type="radio" name="mode" value="studio"> В студии</label>
@@ -38,7 +37,6 @@
         <button class="btn-next" disabled>Далее →</button>
       </div>
     </div>
-    <!-- Шаг 2 -->
     <div class="step" data-step="2">
       <h2>2. Дата и время</h2>
       <label>Дата: <input id="date-picker" readonly placeholder="– выберите дату –"></label>
@@ -48,7 +46,6 @@
         <button class="btn-next" disabled>Далее →</button>
       </div>
     </div>
-    <!-- Шаг 3 -->
     <div class="step" data-step="3">
       <h2>3. Подробности</h2>
       <label>Количество: <input type="text" id="count" inputmode="numeric" pattern="\d*" placeholder="1"></label>
@@ -62,7 +59,6 @@
         <button class="btn-next" disabled>Далее →</button>
       </div>
     </div>
-    <!-- Шаг 4 -->
     <div class="step" data-step="4">
       <h2>4. Доп. услуги & пожелания</h2>
       <div id="extras-container">
@@ -71,23 +67,19 @@
         <label><input type="checkbox" name="extras" value="videographer"> Видеограф</label>
         <label><input type="checkbox" name="extras" value="disco"> Дискотека</label>
       </div>
-      <label>Пожелания:<textarea id="wishes" rows="3" placeholder="…" style="width:100%;padding:8px;background:#222;color:#fff;border:1px solid #444;border-radius:4px;resize:vertical;margin-top:4px;"></textarea></label>
+      <label>Пожелания:<textarea id="wishes" rows="3" placeholder="…"></textarea></label>
       <div class="buttons">
-  <button class="btn-prev">← Назад</button>
-</div>
-<!-- Кнопка Telegram появится снизу -->
+        <button class="btn-prev">← Назад</button>
+      </div>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
-    // Безопасная проверка наличия Telegram.WebApp
     const tg = (typeof window.Telegram === 'object' && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
     if (tg) tg.ready();
 
-    // Элементы и шаги
     const steps = Array.from(document.querySelectorAll('.step'));
-    const btnNext = steps.map(s => s.querySelector('.btn-next')).filter(Boolean);
+    const btnNext = steps.map(s => s.querySelector('.btn-next'));
     const btnPrev = steps.map(s => s.querySelector('.btn-prev'));
     const datePicker  = document.getElementById('date-picker');
     const timeSelect  = document.getElementById('time-select');
@@ -99,12 +91,11 @@
     const visitsSel   = document.getElementById('visits');
     const occasionSel = document.getElementById('occasion');
 
-    // Настройка Date & Time picker
     flatpickr(datePicker, { dateFormat:'d.m.Y', minDate:'today', onChange:()=>validateStep(1) });
     for (let h=9; h<=22; h++) {
       ['00','30'].forEach(m=>{
         if (h===22 && m==='30') return;
-        let opt = document.createElement('option');
+        const opt = document.createElement('option');
         opt.value = `${h.toString().padStart(2,'0')}:${m}`;
         opt.textContent = opt.value;
         timeSelect.append(opt);
@@ -117,65 +108,63 @@
       if (i===0) ok = !!document.querySelector('input[name="mode"]:checked');
       else if (i===1) ok = !!datePicker.value && !!timeSelect.value;
       else if (i===2) ok = Number(countInput.value)>0 && !!programSel.value && !!ageSel.value && !!visitsSel.value && !!occasionSel.value &&
-                         (addressCont.style.display==='none' || addressInput.value.trim()!=='');
+                          (addressCont.style.display==='none' || addressInput.value.trim()!=='');
       else if (i===3) ok = true;
-      btnNext[i].disabled = !ok;
+      btnNext[i] && (btnNext[i].disabled = !ok);
     }
 
-    // Навигация
     function showStep(i) {
       steps.forEach((s,idx)=>s.classList.toggle('active',idx===i));
       current = i; validateStep(i);
-      // адрес для выезда
-      let mode = document.querySelector('input[name="mode"]:checked')?.value;
+      const mode = document.querySelector('input[name="mode"]:checked')?.value;
       addressCont.style.display = (mode==='outdoor') ? 'flex' : 'none';
     }
-    btnNext.forEach((btn, idx)=> btn.addEventListener('click', ()=> idx<steps.length-1 ? showStep(idx+1) : finish()));
-    btnPrev.forEach((btn, idx)=> btn.addEventListener('click', ()=> idx>0 && showStep(idx-1)));
 
-    // Триггеры валидации
+    btnNext.forEach((btn, idx)=> btn?.addEventListener('click', ()=> idx<steps.length-1 ? showStep(idx+1) : null));
+    btnPrev.forEach((btn, idx)=> btn?.addEventListener('click', ()=> idx>0 && showStep(idx-1)));
+
     document.querySelectorAll('input[name="mode"]').forEach(r=> r.addEventListener('change', ()=> validateStep(0)));
-    datePicker.addEventListener('change', ()=> validateStep(1)); timeSelect.addEventListener('change', ()=> validateStep(1));
-    countInput.addEventListener('input', ()=> validateStep(2)); programSel.addEventListener('change', ()=> validateStep(2));
-    ageSel.addEventListener('change', ()=> validateStep(2)); visitsSel.addEventListener('change', ()=> validateStep(2));
+    datePicker.addEventListener('change', ()=> validateStep(1));
+    timeSelect.addEventListener('change', ()=> validateStep(1));
+    countInput.addEventListener('input', ()=> validateStep(2));
+    programSel.addEventListener('change', ()=> validateStep(2));
+    ageSel.addEventListener('change', ()=> validateStep(2));
+    visitsSel.addEventListener('change', ()=> validateStep(2));
     occasionSel.addEventListener('change', ()=> validateStep(2));
+
     validateStep(0);
 
-// Отправка данных и закрытие
-function finish() {
-  const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(i=>i.value);
-  const payload = {
-    action: 'booking',
-    payload: {
-      mode: document.querySelector('input[name="mode"]:checked').value,
-      date: datePicker.value,
-      time: timeSelect.value,
-      count: countInput.value,
-      address: addressInput.value || '',
-      program: programSel.value,
-      age:     ageSel.value,
-      visits:  visitsSel.value,
-      occasion: occasionSel.value,
-      extras:  extras,
-      wishes:  document.getElementById('wishes').value.trim()
+    function finish() {
+      const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(i=>i.value);
+      const payload = {
+        action: 'booking',
+        payload: {
+          mode: document.querySelector('input[name="mode"]:checked').value,
+          date: datePicker.value,
+          time: timeSelect.value,
+          count: countInput.value,
+          address: addressInput.value || '',
+          program: programSel.value,
+          age:     ageSel.value,
+          visits:  visitsSel.value,
+          occasion: occasionSel.value,
+          extras:  extras,
+          wishes:  document.getElementById('wishes').value.trim()
+        }
+      };
+      if (tg) {
+        tg.sendData(JSON.stringify(payload));
+        setTimeout(() => tg.close(), 100);
+      } else {
+        console.log('Mock sendData', payload);
+      }
     }
-  };
 
-  if (tg) {
-    tg.sendData(JSON.stringify(payload));
-    setTimeout(() => tg.close(), 100);
-  } else {
-    console.log('Mock sendData', payload);
-  }
-}
-
-// Привязка MainButton после объявления finish()
-if (tg && tg.MainButton) {
-  tg.MainButton.setText("Записаться");
-  tg.MainButton.show();
-  tg.MainButton.onClick(finish);
-}
-
+    if (tg && tg.MainButton) {
+      tg.MainButton.setText("Записаться");
+      tg.MainButton.show();
+      tg.MainButton.onClick(finish);
+    }
   </script>
 </body>
 </html>
