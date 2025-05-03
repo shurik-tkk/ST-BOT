@@ -180,6 +180,8 @@ steps.forEach((stepEl, idx) => {
 
     validateStep(0);
 
+
+
 function finish() {
   const payload = {
     timestamp: Math.floor(Date.now() / 1000),
@@ -196,18 +198,15 @@ function finish() {
     wishes: document.getElementById('wishes').value.trim()
   };
 
-  if (tg) {
-    tg.sendData(JSON.stringify(payload));  // 🔧 УБРАЛ обёртку { payload }
-    setTimeout(() => tg.close(), 100);
+  if (tg && tg.sendData) {
+    console.log("📤 Отправка данных из WebApp:", payload);
+    tg.sendData(JSON.stringify({ payload }));
+    tg.close();
   } else {
-    console.log("Mock payload", payload);
+    alert("Ошибка: WebApp не поддерживается");
   }
 }
 
-    document.getElementById('finish-btn').addEventListener('click', finish);
-    if (tg && tg.MainButton) {
-      tg.MainButton.onClick(finish);
-    }
-  </script>
+</script>
 </body>
 </html>
