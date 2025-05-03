@@ -149,18 +149,25 @@
     }
 
 function showStep(step) {
-  document.querySelectorAll('.step').forEach((s, i) => {
+  console.log("🔥 showStep called with step:", step);
+  steps.forEach((s, i) => {
     s.classList.toggle('active', i === step);
   });
-  validateStep(step); // ✅ передаём step как аргумент
+  validateStep(step);
 }
 
-    steps.forEach((step, idx) => {
-      const nextBtn = step.querySelector('.btn-next');
-      const prevBtn = step.querySelector('.btn-prev');
-      nextBtn?.addEventListener('click', () => showStep(idx + 1));
-      prevBtn?.addEventListener('click', () => showStep(idx - 1));
-    });
+steps.forEach((stepEl, idx) => {
+  const nextBtn = stepEl.querySelector('.btn-next');
+  const prevBtn = stepEl.querySelector('.btn-prev');
+
+  nextBtn?.addEventListener('click', () => {
+    if (idx + 1 < steps.length) showStep(idx + 1); // ✅
+  });
+
+  prevBtn?.addEventListener('click', () => {
+    if (idx - 1 >= 0) showStep(idx - 1); // ✅
+  });
+});
 
     document.querySelectorAll('input[name="mode"]').forEach(el => el.addEventListener('change', () => validateStep(0)));
     datePicker.addEventListener('change', () => validateStep(1));
