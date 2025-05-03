@@ -148,14 +148,12 @@
       }
     }
 
-    function showStep(i) {
-      steps.forEach((s, idx) => s.classList.toggle('active', idx === i));
-      current = i;
-      validateStep(i);
-
-      const mode = document.querySelector('input[name="mode"]:checked')?.value;
-      addressCont.style.display = (mode === "outdoor") ? 'block' : 'none';
-    }
+    function showStep(step) {
+  document.querySelectorAll('.step').forEach((s, i) => {
+    s.classList.toggle('active', i === step);
+  });
+  validateStep();
+}
 
     steps.forEach((step, idx) => {
       const nextBtn = step.querySelector('.btn-next');
@@ -175,29 +173,29 @@
 
     validateStep(0);
 
-    function finish() {
-      const payload = {
-        timestamp: Math.floor(Date.now() / 1000),
-        mode: document.querySelector('input[name="mode"]:checked')?.value,
-        date: datePicker.value,
-        time: timeSelect.value,
-        count: countInput.value,
-        address: addressInput.value || '',
-        program: programSel.value,
-        age: ageSel.value,
-        visits: visitsSel.value,
-        occasion: occasionSel.value,
-        extras: Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(el => el.value),
-        wishes: document.getElementById('wishes').value.trim()
-      };
+function finish() {
+  const payload = {
+    timestamp: Math.floor(Date.now() / 1000),
+    mode: document.querySelector('input[name="mode"]:checked')?.value,
+    date: datePicker.value,
+    time: timeSelect.value,
+    count: countInput.value,
+    address: addressInput.value || '',
+    program: programSel.value,
+    age: ageSel.value,
+    visits: visitsSel.value,
+    occasion: occasionSel.value,
+    extras: Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(el => el.value),
+    wishes: document.getElementById('wishes').value.trim()
+  };
 
-      if (tg) {
-        tg.sendData(JSON.stringify({ payload }));
-        setTimeout(() => tg.close(), 100);
-      } else {
-        console.log("Mock payload", payload);
-      }
-    }
+  if (tg) {
+    tg.sendData(JSON.stringify(payload));  // 🔧 УБРАЛ обёртку { payload }
+    setTimeout(() => tg.close(), 100);
+  } else {
+    console.log("Mock payload", payload);
+  }
+}
 
     document.getElementById('finish-btn').addEventListener('click', finish);
     if (tg && tg.MainButton) {
