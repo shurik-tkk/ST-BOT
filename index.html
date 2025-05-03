@@ -203,6 +203,8 @@ function finish() {
     tg.sendData(JSON.stringify({ payload }));
     tg.close();
   } else {
+    console.warn("🚫 tg.sendData не доступен. Это нормально в браузере.");
+    console.log("🎒 payload, который бы отправился:", payload);
     alert("Ошибка: WebApp не поддерживается");
   }
 }
