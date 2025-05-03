@@ -148,11 +148,11 @@
       }
     }
 
-    function showStep(step) {
+function showStep(step) {
   document.querySelectorAll('.step').forEach((s, i) => {
     s.classList.toggle('active', i === step);
   });
-  validateStep();
+  validateStep(step); // ✅ передаём step как аргумент
 }
 
     steps.forEach((step, idx) => {
